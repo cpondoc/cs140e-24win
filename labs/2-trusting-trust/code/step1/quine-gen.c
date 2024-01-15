@@ -27,7 +27,7 @@ int main(void) {
     }
 
     // Close the tab out and print the rest of the string
-    s[i] = 0;
+    s[i] = '\0';
     printf("0 };\n");
     printf("%s", s);
 	return 0;

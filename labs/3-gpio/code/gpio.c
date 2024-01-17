@@ -123,10 +123,6 @@ void gpio_set_input(unsigned pin) {
 
 // return the value of <pin>
 int gpio_read(unsigned pin) {
-  if (pin >= 32) {
-    return 0;
-  }
-
   // Check this value
   uint32_t pins = GET32(gpio_lev0);
   uint32_t mask = 1 << pin;

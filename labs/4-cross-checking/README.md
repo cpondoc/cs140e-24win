@@ -247,7 +247,7 @@ To see how this all works:
 The `Makefile` in `1-fake-pi/tests` automates the process, but to understand
 how this works, let's run the `1-blink` from last lab using `fake-pi`:
 
-            % cd labs/2-cross-check/1-fake-pi/tests
+            % cd labs/4-cross-check/1-fake-pi/tests
             % make
             % ./prog-1-blink > prog-1-blink.out
             % cksum prog-1-blink.out
@@ -318,22 +318,21 @@ First things first:
             }
 
 
-   3. Make sure you can compile without errors.
+  3. Make sure you can compile without errors.
 
-        % make 
+            % make 
        
-   4. Change into the `tests` subdirectory and run a single test.
+  4. Change into the `tests` subdirectory and run a single test.
 
-        % cd tests
-        # should run a single test
-        % make run
-        # test should pass.
-        % make check
+            % cd tests
+            # should run a single test
+            % make run
+            # test should pass.
+            % make check
 
 
-   5. If you look in the `Makefile` in tests it describes how to 
+  5. If you look in the `Makefile` in tests it describes how to 
       run the other tests.  
-
 
 
 ##### How to run the tests.
@@ -376,9 +375,10 @@ You should compare to your partner and work through the tests.
 
 ##### Making  code behave the same on illegal inputs
 
-The first batch of tests only run on a single legal input.  However,
-the second batch (`2-*.c`) check illegal pin inputs as well.  If we
-don't state how to handle them, it's easy to get different results.
+
+The `0-` and `1-` tests  work on legal inputs.  You should get these
+working.  The next set (`2-*.c`) check illegal pin inputs as well.
+If we don't state how to handle them, it's easy to get different results.
 
 To keep things simple, you should check if a pin is larger than 32
 and, for `void` routines, simply check and return at the start of 
@@ -406,14 +406,13 @@ they are being used to compute an address that we read and write to
 are running without memory protecton, such invalid accesses are extremely bad 
 since they can silently corrupt data we use or issue weird hardware commands.
 
-
 ##### Checkoff
 
 The easiest way to check all the runs:
   1. Set `TEST_SRC`:
 
             # run all the 0 and 1 tests
-            TEST_SRC := $(wildcard ./[0-1]*.c)
+            TEST_SRC := $(wildcard ./[0-2]*.c)
 
   2. Compute the checksum of checksums.
 
@@ -485,12 +484,13 @@ For `fake-pi.c`:
   - extend `fake-pi.c:PUT32`: to handle writes to the new clear and set locations.
 
 For testing:
-   - *NOTE: Do a `git pull` to get our hashes.*
+  - *NOTE: Do a `git pull` to get our hashes.*
 
-   - Enable the act tests:
+  - Enable the act tests:
 
         # 1-fake-pi/tests/Makefile
         TEST_SRC := $(wildcard ./act-*.c) 
+
 
 ----------------------------------------------------------------------
 #### Step 4. Do similar tracing on the pi (`2-trace`)
@@ -509,7 +509,6 @@ Implement the code in `2-trace`:
 
 As with `1-fake-pi` start working through the tests in `2-trace/tests`.
 
-
 ####### checkoff
 
 Note, that initially you will be using our `gpio` implementation in
@@ -519,11 +518,9 @@ and then drop in your gpio and make sure you get the same answer.
    1. `make emit`.
    2. `make check` to make sure it passes (this compares the current run to 
        the output files emitted in (1)).
-   3. copy your `gpio.c` to `libpi/src` (this is where you will put all your
-      source code in the upcoming labs).
-   4. Change `libpi/Makefile` to use your `gpio.c` instead of ours by changing
+   3. Change `libpi/Makefile` to use your `gpio.c` instead of ours by changing
       `SRC = src/gpio.c` and removing the `staff-objs/gpio.o` from `STAFF_OBJS`
-   5. Now verify tracing gives the same values: `make check`: you should get the same results.
+   4. Now verify tracing gives the same values: `make check`: you should get the same results.
 
 ----------------------------------------------------------------------
 #### Extension: simulator validation

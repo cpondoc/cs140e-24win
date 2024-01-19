@@ -1,0 +1,257 @@
+AssertNow	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/libc/demand.h	/^#define AssertNow(x) switch(1) { case (x): case 0:/
+CLR	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/include/rpi-asm.h	/^#define CLR(reg) mov reg, #0 $/
+CQ_T	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/libc/circular-T.h	/^#define CQ_T(pfx) pfx ## _cq_T $/
+LINE_STR	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/libc/demand.h	/^#define LINE_STR()  LINE_STR_HELPER(__LINE__)$/
+LINE_STR_HELPER	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/libc/demand.h	/^#define LINE_STR_HELPER(x)  _XSTRING(x)$/
+MK_CP15_FUNC	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/include/rpi-asm.h	/^#define MK_CP15_FUNC(name, macro_name)           /
+MK_FN	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/include/rpi-asm.h	/^#define MK_FN(fn_name)     \\$/
+MK_STR	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/include/asm-helpers.h	/^#define MK_STR(x) #x$/
+MK_TRAMPOLINE	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/staff-src/unhandled-exception.S	/^#define MK_TRAMPOLINE(name, offset, fn)     \\$/
+MK_WEAK_SYM	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/include/rpi-asm.h	/^#define MK_WEAK_SYM(name)   .weak name; name$/
+Mpi-random	../1-fake-pi/pi-random.c	/^int main() {$/
+Mrandom	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/libc/random.c	/^int main() {$/
+Q_T	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/libc/queue-T.h	/^#define Q_T(pfx) pfx ## _T$/
+SRC_LOC_MK	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/include/src-loc.h	/^#define SRC_LOC_MK() src_loc_mk(__FILE__, __FUNCTI/
+STACK_T	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/libc/stack-T.h	/^    static inline STACK_T(pfx) pfx ## _mk(void) { /
+STRING	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/include/rpi-asm.h	/^#define STRING(x) STRING2(x)$/
+STRING2	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/include/rpi-asm.h	/^#define STRING2(x) #x$/
+T	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/libc/helper-macros.h	/^\/\/ type pun a uint32 into a type T (hopefully) w/
+TIME_CYC	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/include/cycle-count.h	/^#define TIME_CYC(_fn) ({                \\$/
+TIME_CYC_10	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/include/cycle-count.h	/^#define TIME_CYC_10(_fn) ({                     \\/
+TIME_CYC_PRINT	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/include/cycle-count.h	/^#define TIME_CYC_PRINT(_msg, _fn) do {            /
+TIME_CYC_PRINT10	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/include/cycle-count.h	/^#define TIME_CYC_PRINT10(_msg, _fn) do {          /
+_XSTRING	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/libc/demand.h	/^#define _XSTRING(x) #x$/
+_cstart	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/staff-src/cstart.c	/^void _cstart() {$/
+_u	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/libc/helper-macros.h	/^        union _u { _T v; unsigned u; } u = (union /
+aligned	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/libc/helper-macros.h	/^#define aligned(ptr, n)  ((unsigned)ptr % n == 0)$/
+aligned4	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/libc/helper-macros.h	/^#define aligned4(ptr)  aligned(ptr,4)$/
+aligned8	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/libc/lmemcpy.h	/^#define aligned8(ptr)  aligned(ptr,8)$/
+asm_bad_exception	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/include/rpi-asm.h	/^#define asm_bad_exception(msg)  \\$/
+asm_bad_exception_helper	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/staff-src/asm-helpers.c	/^void asm_bad_exception_helper(uint32_t pc, const c/
+asm_call_helper_w_msg	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/include/rpi-asm.h	/^#define asm_call_helper_w_msg(fn, msg)  \\$/
+asm_not_implemented	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/include/rpi-asm.h	/^#define asm_not_implemented()  \\$/
+asm_not_implemented_helper	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/staff-src/asm-helpers.c	/^void asm_not_implemented_helper(uint32_t pc, const/
+asm_not_reached	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/include/rpi-asm.h	/^#define asm_not_reached()  \\$/
+asm_not_reached_helper	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/staff-src/asm-helpers.c	/^void asm_not_reached_helper(uint32_t pc, const cha/
+asm_todo	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/include/rpi-asm.h	/^#define asm_todo(msg)  \\$/
+asm_todo_helper	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/staff-src/asm-helpers.c	/^void asm_todo_helper(uint32_t pc, const char *todo/
+assert	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/libc/demand.h	/^#define assert(bool) do {                         /
+at_user_level	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/staff-src/reboot.c	/^int at_user_level(void) {$/
+bcm_set_interrupts_off	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/staff-src/interrupts-c.c	/^void bcm_set_interrupts_off(void) {$/
+bit_clr	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/libc/bit-support.h	/^bit_clr(uint32_t x, unsigned bit) {$/
+bit_count	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/libc/bit-support.h	/^bit_count(uint32_t x) {$/
+bit_is_off	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/libc/bit-support.h	/^bit_is_off(uint32_t x, unsigned bit) {$/
+bit_is_on	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/libc/bit-support.h	/^bit_is_on(uint32_t x, unsigned bit) {$/
+bit_not	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/libc/bit-support.h	/^bit_not(uint32_t x, unsigned bit) {$/
+bit_set	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/libc/bit-support.h	/^bit_set(uint32_t x, unsigned bit) {$/
+bits_clr	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/libc/bit-support.h	/^bits_clr(uint32_t x, unsigned lb, unsigned ub) {$/
+bits_diff	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/libc/bit-support.h	/^bits_diff(uint32_t A, uint32_t B) {$/
+bits_eq	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/libc/bit-support.h	/^bits_eq(uint32_t x, unsigned lb, unsigned ub, uint/
+bits_get	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/libc/bit-support.h	/^bits_get(uint32_t x, unsigned lb, unsigned ub) {$/
+bits_intersect	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/libc/bit-support.h	/^bits_intersect(uint32_t x, uint32_t y) {$/
+bits_mask	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/libc/bit-support.h	/^static inline uint32_t bits_mask(unsigned nbits) {/
+bits_not	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/libc/bit-support.h	/^static inline uint32_t bits_not(uint32_t x) {$/
+bits_set	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/libc/bit-support.h	/^bits_set(uint32_t x, unsigned lb, unsigned ub, uin/
+bits_union	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/libc/bit-support.h	/^bits_union(uint32_t x, uint32_t y) {$/
+caches_disable	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/staff-src/cache.c	/^void caches_disable(void) {$/
+caches_enable	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/staff-src/cache.c	/^void caches_enable(void) {$/
+caches_is_enabled	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/staff-src/cache.c	/^int caches_is_enabled(void) {$/
+caller	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/include/rpi-thread.h	/^\/\/  reutrn to the caller (which will now be diff/
+can	../1-fake-pi/gpio.c	/^\/\/ can (and should) use array calculations!$/
+check_bitfield	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/libc/helper-macros.h	/^#define check_bitfield(T, field, off, nbits) do { /
+check_off	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/libc/helper-macros.h	/^#define check_off(T, field, off, nbytes) do {     /
+check_off_static	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/libc/helper-macros.h	/^#define check_off_static(T, field, off, nbytes) do/
+chr	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/libc/putchar.c	/^typedef int (*rpi_putchar_t)(int chr);$/
+clean_reboot	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/staff-src/clean-reboot.c	/^void clean_reboot(void) {$/
+cp_asm	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/include/asm-helpers.h	/^#define cp_asm(fn_name, coproc, opcode_1, Crn, Crm/
+cp_asm_fn	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/include/asm-helpers.h	/^#define cp_asm_fn(fn_name, coproc, opcode_1, Crn, /
+cp_asm_get	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/include/asm-helpers.h	/^#define cp_asm_get(fn_name, coproc, opcode_1, Crn,/
+cp_asm_get_fn	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/include/asm-helpers.h	/^#define cp_asm_get_fn(fn_name, coproc, opcode_1, C/
+cp_asm_raw	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/include/asm-helpers.h	/^#define cp_asm_raw(fn_name, coproc, opcode_1, Crn,/
+cp_asm_set	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/include/asm-helpers.h	/^#define cp_asm_set(fn_name, coproc, opcode_1, Crn,/
+cp_asm_set_fn	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/include/asm-helpers.h	/^#define cp_asm_set_fn(fn_name, coproc, opcode_1, C/
+cp_asm_set_raw	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/include/asm-helpers.h	/^#define cp_asm_set_raw(fn_name, coproc, opcode_1, /
+cp_asm_set_raw_fn	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/include/asm-helpers.h	/^#define cp_asm_set_raw_fn(fn_name, coproc, opcode_/
+cpsr_get	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/include/rpi-interrupts.h	/^static inline uint32_t cpsr_get(void) {$/
+cpsr_int_reset	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/include/rpi-inline-asm.h	/^static inline uint32_t cpsr_int_reset(uint32_t cps/
+cpsr_set	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/include/rpi-interrupts.h	/^static inline void cpsr_set(uint32_t cpsr) {$/
+cq_ckpt	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/libc/circular.h	/^static inline unsigned cq_ckpt(cq_t *c) { return c/
+cq_empty	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/libc/circular.h	/^static inline int cq_empty(cq_t *q) { gcc_mb(); re/
+cq_full	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/libc/circular.h	/^static inline int cq_full(cq_t *q) { gcc_mb(); ret/
+cq_init	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/libc/circular.h	/^static inline void cq_init(cq_t *c, unsigned error/
+cq_nelem	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/libc/circular.h	/^static inline unsigned cq_nelem(cq_t *q) { gcc_mb(/
+cq_nspace	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/libc/circular.h	/^static inline unsigned cq_nspace(cq_t *q) { return/
+cq_ok	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/libc/circular.h	/^static inline void cq_ok(cq_t *c) {$/
+cq_peek	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/libc/circular.h	/^static inline int cq_peek(cq_t *c, cqe_t *e) {$/
+cq_peek_n	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/libc/circular.h	/^static inline int cq_peek_n(cq_t *c, cqe_t *v, uns/
+cq_pop	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/libc/circular.h	/^static inline cqe_t cq_pop(cq_t *c) {$/
+cq_pop32	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/libc/circular.h	/^static inline uint32_t cq_pop32(cq_t *c) {$/
+cq_pop32_noblk	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/libc/circular.h	/^static inline int cq_pop32_noblk(cq_t *c, uint32_t/
+cq_pop_n	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/libc/circular.h	/^static inline void cq_pop_n(cq_t *c, void *data, u/
+cq_pop_n_noblk	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/libc/circular.h	/^static inline int cq_pop_n_noblk(cq_t *q, void *da/
+cq_pop_nonblock	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/libc/circular.h	/^static inline int cq_pop_nonblock(cq_t *c, cqe_t */
+cq_print	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/libc/circular.h	/^static inline void cq_print(cq_t *c) {$/
+cq_push	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/libc/circular.h	/^static inline int cq_push(cq_t *c, cqe_t x) {$/
+cq_push32	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/libc/circular.h	/^static inline int cq_push32(cq_t *c, uint32_t x) {/
+cq_push_n	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/libc/circular.h	/^static inline int cq_push_n(cq_t *c, const void *d/
+cq_restore	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/libc/circular.h	/^static inline void cq_restore(cq_t *c, unsigned ck/
+cq_t	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/libc/circular.h	/^} cq_t;$/
+cqe_t	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/libc/circular.h	/^    typedef unsigned char cqe_t;$/
+custom_loader	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/staff-src/custom-loader.c	/^void custom_loader(void) {$/
+cycle_cnt_init	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/include/cycle-count.h	/^#define cycle_cnt_init() do {                     /
+cycle_cnt_read	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/include/cycle-count.h	/^#define cycle_cnt_read() ({	 					                /
+data_abort_vector	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/staff-src/default-handler-data-abort.c	/^void data_abort_vector(unsigned pc) { INT_UNHANDLE/
+debug	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/libc/demand.h	/^#define debug(msg, args...) \\$/
+default_putchar	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/libc/putchar.c	/^static int default_putchar(int c) { $/
+delay_cycles	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/staff-src/delay-ncycles.c	/^void delay_cycles(uint32_t ticks) {$/
+delay_ms	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/staff-src/timer.c	/^void delay_ms(uint32_t ms) {$/
+delay_ncycles	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/include/cycle-util.h	/^static inline unsigned delay_ncycles(unsigned star/
+delay_sec	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/staff-src/timer.c	/^void delay_sec(uint32_t sec) {$/
+delay_us	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/staff-src/timer.c	/^void delay_us(uint32_t us) {$/
+demand	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/libc/demand.h	/^#define demand(_expr, _msg, args...) do {         /
+edge	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/include/gpio.h	/^\/\/ p97 set to detect rising edge (0->1) on <pin>/
+emit_val	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/libc/printk.c	/^static void emit_val(unsigned base, uint32_t u) {$/
+fake_random_calls	../1-fake-pi/fake-random.c	/^unsigned fake_random_calls(void) {$/
+fake_random_init	../1-fake-pi/fake-random.c	/^void fake_random_init(void) {$/
+fast_hash	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/libc/fast-hash32.h	/^static inline uint32_t fast_hash(const void * data/
+fast_hash32	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/libc/fast-hash32.h	/^static inline uint32_t fast_hash32(const void * da/
+fast_hash_inc32	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/libc/fast-hash32.h	/^static inline uint32_t fast_hash_inc32(const void /
+fast_interrupt_vector	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/staff-src/default-handler-fast.c	/^void fast_interrupt_vector(unsigned pc) { INT_UNHA/
+fiq_vector	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/staff-src/default-handler-fast.c	/^void fiq_vector(unsigned pc) { INT_UNHANDLED("fast/
+gcc_mb	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/include/rpi.h	/^#define gcc_mb() asm volatile ("" : : : "memory")$/
+gen_circular	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/libc/circular-T.h	/^#define gen_circular(pfx, E, N)                   /
+gen_list_T	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/libc/list-T.h	/^#define gen_list_T(pfx, E_T, next_name)     \\$/
+gen_queue_T	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/libc/queue-T.h	/^#define gen_queue_T(pfx, E_T, next)               /
+get16bits	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/libc/fast-hash32.h	/^#define get16bits(d) (*((const uint16_t *) (d)))$/
+gpio_func_t	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/include/gpio.h	/^} gpio_func_t;$/
+gpio_int_falling_edge	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/include/gpio.h	/^\/\/ gpio_int_rising_edge and gpio_int_falling_edg/
+gpio_read	../1-fake-pi/gpio.c	/^int gpio_read(unsigned pin) {$/
+gpio_set_function	../1-fake-pi/gpio.c	/^void gpio_set_function(unsigned pin, gpio_func_t f/
+gpio_set_input	../1-fake-pi/gpio.c	/^void gpio_set_input(unsigned pin) {$/
+gpio_set_off	../1-fake-pi/gpio.c	/^void gpio_set_off(unsigned pin) {$/
+gpio_set_on	../1-fake-pi/gpio.c	/^void gpio_set_on(unsigned pin) {$/
+gpio_write	../1-fake-pi/gpio.c	/^void gpio_write(unsigned pin, unsigned v) {$/
+initstate_r	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/libc/random.c	/^int initstate_r (unsigned int seed, char *arg_stat/
+int_init	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/staff-src/interrupts-c.c	/^void int_init(void) {$/
+int_is_enabled	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/include/rpi-interrupts.h	/^static inline int int_is_enabled(void) {$/
+int_vector	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/staff-src/default-handler-int.c	/^void int_vector(unsigned pc) { INT_UNHANDLED("inte/
+interrupt_vector	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/staff-src/default-handler-interrupt.c	/^void interrupt_vector(unsigned pc) { INT_UNHANDLED/
+is_aligned	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/libc/helper-macros.h	/^#define is_aligned(x, a)        ((unsigned)(x) % (/
+is_aligned4	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/libc/pointer-T.h	/^#define is_aligned4(ptr) is_aligned(ptr,4)$/
+is_aligned8	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/libc/pointer-T.h	/^#define is_aligned8(ptr) is_aligned(ptr,8)$/
+is_aligned_ptr	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/libc/helper-macros.h	/^#define is_aligned_ptr(x, a)        is_aligned((ui/
+likely	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/include/rpi.h	/^#define likely(x)       __builtin_expect((x),1)$/
+llmemcpy	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/libc/lmemcpy.h	/^llmemcpy(void *dst, void *src, size_t nbytes) {$/
+lmemcpy	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/libc/lmemcpy.h	/^lmemcpy(void *dst, void *src, size_t nbytes) {$/
+lmemset	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/libc/lmemcpy.h	/^lmemset(void *dst, uint32_t v, size_t nbytes) {$/
+loc_debug	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/include/src-loc.h	/^#define loc_debug(l, args...) do {                /
+loc_panic	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/include/src-loc.h	/^#define loc_panic(l, args...) do {                /
+memcmp	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/libc/memcmp.c	/^int memcmp(const void *_s1, const void *_s2, size_/
+memcpy	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/libc/memcpy.c	/^void *memcpy(void *dst, const void *src, size_t nb/
+memiszero	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/libc/memiszero.c	/^int memiszero(const void *_p, unsigned n) {$/
+memmove	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/libc/memmove.c	/^void *memmove(void *dst, const void *src, size_t c/
+memset	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/libc/memset.c	/^void *memset(void *dst, int c, size_t n) {$/
+not_reached	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/libc/demand.h	/^#define not_reached()   panic("NOTREACHED!\\n");$/
+notmain	hello.c	/^void notmain(void) {$/
+our_crc32	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/libc/crc.c	/^uint32_t our_crc32(const void *buf, unsigned size)/
+our_crc32_inc	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/libc/crc.c	/^uint32_t our_crc32_inc(const void *buf, unsigned s/
+panic	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/libc/demand.h	/^#define panic(msg, args...) do { 					    \\$/
+pi_initstate_r	../1-fake-pi/pi-random.c	/^int pi_initstate_r (unsigned int seed, char *arg_s/
+pi_random	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/libc/pi-random.c	/^uint32_t pi_random(void) {$/
+pi_random_data	../1-fake-pi/pi-random.h	/^struct pi_random_data$/
+pi_random_init	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/libc/pi-random.c	/^uint32_t pi_random_init(void) {$/
+pi_random_r	../1-fake-pi/pi-random.c	/^int pi_random_r(struct pi_random_data *buf, int32_/
+pi_random_seed	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/libc/pi-random.c	/^void pi_random_seed(uint32_t x) {$/
+pi_roundup	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/libc/helper-macros.h	/^#define pi_roundup(x,n) (((x)+((n)-1))&(~((n)-1)))/
+pi_setstate_r	../1-fake-pi/pi-random.c	/^int pi_setstate_r (char *arg_state, struct pi_rand/
+pi_srandom_r	../1-fake-pi/pi-random.c	/^int pi_srandom_r (unsigned int seed, struct pi_ran/
+prefetch_abort_vector	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/staff-src/default-handler-prefetch.c	/^void prefetch_abort_vector(unsigned pc) { INT_UNHA/
+prefetch_flush	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/staff-start.S	/^    prefetch_flush(r1)$/
+pretty_print_usec	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/libc/pretty-time.h	/^pretty_print_usec(uint32_t start_usec) {$/
+pretty_time_mk	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/libc/pretty-time.h	/^pretty_time_mk(uint32_t start_usec) {$/
+pretty_time_print	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/libc/pretty-time.h	/^pretty_time_print(pretty_time_t t) {$/
+pretty_time_t	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/libc/pretty-time.h	/^} pretty_time_t;$/
+print_field	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/libc/helper-macros.h	/^#define print_field(x, field) do {                /
+print_random	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/libc/random.c	/^static void print_random(struct random_data *r, un/
+printk	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/libc/printk.c	/^int printk(const char *fmt, ...) {$/
+putk	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/libc/putk.c	/^int putk(const char *p) {$/
+random	../1-fake-pi/fake-pi.h	/^#define random() "do not call random() directly"$/
+random_data	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/libc/random.h	/^struct random_data$/
+random_r	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/libc/random.c	/^int random_r(struct random_data *buf, int32_t *res/
+reboot_callout	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/staff-src/default-reboot-callout.c	/^void reboot_callout(void) {} $/
+reboot_handler	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/staff-src/default-reboot-handler.c	/^void reboot_handler(void) { } $/
+reset_vector	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/staff-src/default-handler-reset.c	/^void reset_vector(unsigned pc) { INT_UNHANDLED("re/
+rpi_arm_timer_ctrl_t	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/include/rpi-armtimer.h	/^} rpi_arm_timer_ctrl_t;$/
+rpi_arm_timer_t	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/include/rpi-armtimer.h	/^} rpi_arm_timer_t;$/
+rpi_putchar	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/libc/putchar.c	/^int rpi_putchar(int c) { $/
+rpi_putchar_set	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/libc/putchar.c	/^rpi_putchar_t rpi_putchar_set(rpi_putchar_t putc) /
+rpi_thread_t	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/include/rpi-thread.h	/^} rpi_thread_t;$/
+rpi_wait	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/staff-src/rpi-wait.c	/^void rpi_wait(void) { }$/
+set_all_interrupts_off	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/staff-src/interrupts-c.c	/^uint32_t set_all_interrupts_off(void) {$/
+set_user_level	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/staff-src/reboot.c	/^void set_user_level(void) {$/
+setstate_r	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/libc/random.c	/^int setstate_r (char *arg_state, struct random_dat/
+software_interrupt_vector	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/staff-src/default-handler-int.c	/^\/\/void software_interrupt_vector(unsigned pc) { /
+spi_mk	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/include/spi.h	/^spi_mk(unsigned chip_select, unsigned clk_div) {$/
+spi_print_config	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/include/spi.h	/^static inline void spi_print_config(const char *ms/
+spi_set_ce	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/include/spi.h	/^static inline spi_t spi_set_ce(spi_t s, uint8_t ce/
+spi_set_clk	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/include/spi.h	/^static inline spi_t spi_set_clk(spi_t s, uint8_t c/
+spi_set_miso	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/include/spi.h	/^static inline spi_t spi_set_miso(spi_t s, uint8_t /
+spi_set_mosi	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/include/spi.h	/^static inline spi_t spi_set_mosi(spi_t s, uint8_t /
+spi_t	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/include/spi.h	/^} spi_t;$/
+srandom_r	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/libc/random.c	/^int srandom_r (unsigned int seed, struct random_da/
+src_loc_mk	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/include/src-loc.h	/^src_loc_t src_loc_mk(const char *file, const char /
+src_loc_t	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/include/src-loc.h	/^} src_loc_t; $/
+strcat	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/libc/strcat.c	/^char *strcat (char *dest, const char *src) {$/
+strchr	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/libc/strchr.c	/^char *strchr(register const char *s, int c) {$/
+strcmp	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/libc/strcmp.c	/^int strcmp(const char *a, const char *b) {$/
+strcpy	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/libc/strcpy.c	/^char *strcpy(char * s1, const char * s2) {$/
+strlen	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/libc/strlen.c	/^size_t strlen(const char *p) {$/
+strncmp	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/libc/strncmp.c	/^int strncmp(const char* _s1, const char* _s2, size/
+sw_spi_mk	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/include/spi.h	/^static inline spi_t sw_spi_mk(unsigned chip_select/
+sw_uart_init	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/include/sw-uart.h	/^#define sw_uart_init(_tx,_rx,_baud) \\$/
+syscall_vector	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/staff-src/default-handler-swi.c	/^void syscall_vector(unsigned pc) { INT_UNHANDLED("/
+test_passed	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/libc/demand.h	/^#define test_passed(args...)  \\$/
+time_print	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/libc/time-print.h	/^static void time_print(const char *msg, uint32_t s/
+time_to_msec	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/libc/time-print.h	/^static inline unsigned time_to_msec(unsigned tot) /
+time_to_sec	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/libc/time-print.h	/^static inline unsigned time_to_sec(unsigned tot) {/
+time_to_usec	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/libc/time-print.h	/^static inline unsigned time_to_usec(unsigned tot) /
+timeout_get_usec	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/include/timeout.h	/^static inline uint64_t timeout_get_usec(timeout_t /
+timeout_msec	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/include/timeout.h	/^static inline int timeout_msec(timeout_t *t, uint6/
+timeout_null	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/include/timeout.h	/^static inline int timeout_null(timeout_t *t) {$/
+timeout_sec	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/include/timeout.h	/^static inline int timeout_sec(timeout_t *t, uint64/
+timeout_usec	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/include/timeout.h	/^static inline int timeout_usec(timeout_t *t, uint6/
+timer_check_offsets	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/staff-src/timer-interrupt.c	/^static void timer_check_offsets(void) {$/
+timer_get_usec	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/staff-src/timer.c	/^uint32_t timer_get_usec(void) {$/
+timer_get_usec_raw	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/staff-src/timer.c	/^uint32_t timer_get_usec_raw(void) {$/
+timer_interrupt_init	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/staff-src/timer-interrupt.c	/^void timer_interrupt_init(unsigned ncycles) {$/
+todo	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/libc/demand.h	/^#define todo(msg...) panic("TODO:" msg)$/
+tools	../1-fake-pi/fake-pi.c	/^\/\/  4. can run with tools (e.g., valgrind) to lo/
+trace	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/libc/demand.h	/^#define trace(args...) \\$/
+trace_clean_exit	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/libc/demand.h	/^#define trace_clean_exit(args...) \\$/
+trace_notreached	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/libc/demand.h	/^#define trace_notreached() \\$/
+trace_panic	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/libc/demand.h	/^#define trace_panic(args...) do { \\$/
+uart_hex	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/libc/uart-hex.c	/^int uart_hex(unsigned h) {$/
+uint32	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/libc/helper-macros.h	/^\/\/ type pun a type T into a uint32 (hopefully) w/
+undefined_instruction_vector	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/staff-src/default-handler-undefined-inst.c	/^void undefined_instruction_vector(unsigned pc) { I/
+unimplemented	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/libc/demand.h	/^#define unimplemented() panic("implement this func/
+unlikely	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/include/rpi.h	/^#define unlikely(x)     __builtin_expect((x),0)$/
+usec_to_msec	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/libc/pretty-time.h	/^static inline uint32_t usec_to_msec(uint32_t tot_u/
+usec_to_sec	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/libc/pretty-time.h	/^static inline uint32_t usec_to_sec(uint32_t tot_us/
+usec_to_usec	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/libc/pretty-time.h	/^static inline uint32_t usec_to_usec(uint32_t tot_u/
+void	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/include/rpi-thread.h	/^typedef void (*rpi_code_t)(void *);$/
+vprintk	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/libc/printk.c	/^int vprintk(const char *fmt, va_list ap) {$/
+watchdog_feed	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/staff-src/watchdog.c	/^void watchdog_feed(void) {$/
+watchdog_get_time_left_ms	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/staff-src/watchdog.c	/^unsigned watchdog_get_time_left_ms(void) {$/
+watchdog_get_time_left_sec	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/staff-src/watchdog.c	/^unsigned watchdog_get_time_left_sec(void) {$/
+watchdog_get_time_left_ticks	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/staff-src/watchdog.c	/^unsigned watchdog_get_time_left_ticks(void) {$/
+watchdog_get_time_left_us	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/staff-src/watchdog.c	/^unsigned watchdog_get_time_left_us(void) {$/
+watchdog_is_running	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/staff-src/watchdog.c	/^int watchdog_is_running(void) {$/
+watchdog_reboot	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/staff-src/watchdog.c	/^void watchdog_reboot(void) {$/
+watchdog_resume	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/staff-src/watchdog.c	/^void watchdog_resume(void) {$/
+watchdog_shutdown	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/staff-src/watchdog.c	/^void watchdog_shutdown(void) {$/
+watchdog_start_ms	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/staff-src/watchdog.c	/^void watchdog_start_ms(unsigned ms) {$/
+watchdog_start_sec	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/staff-src/watchdog.c	/^void watchdog_start_sec(unsigned sec) {$/
+watchdog_start_ticks	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/staff-src/watchdog.c	/^void watchdog_start_ticks(unsigned ticks) {$/
+watchdog_start_us	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/staff-src/watchdog.c	/^void watchdog_start_us(unsigned us) {$/
+watchdog_stop	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/staff-src/watchdog.c	/^void watchdog_stop(void) {$/
+zero	/Users/cpondoc/Desktop/winter/cs140e-24win//libpi/libc/helper-macros.h	/^#define zero(x) memset(x, 0, sizeof *x)$/

@@ -25,4 +25,10 @@ MK_FN(syscall_illegal)
 @
 @ does not return
 MK_FN(run_user_code_asm)
-    asm_not_implemented()
+    @ - switch to user level
+    msr cpsr, #(0b10000)
+    prefetch_flush(r2)
+    @ - stack address passed in r1
+    mov sp, r1
+    @ - code address passed in r0
+    blx r0

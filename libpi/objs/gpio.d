@@ -1,4 +1,4 @@
-objs/default-reboot-handler.o: staff-src/default-reboot-handler.c \
+objs/gpio.o: src/gpio.c \
  /Users/cpondoc/Desktop/winter/cs140e-24win//libpi/include/rpi.h \
  /Users/cpondoc/Desktop/winter/cs140e-24win//libpi/libc/demand.h \
  /Users/cpondoc/Desktop/winter/cs140e-24win//libpi/include/gpio.h \

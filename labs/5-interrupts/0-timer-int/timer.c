@@ -9,6 +9,7 @@
 #include "timer-interrupt.h"
 
 // Q: if you make not volatile?
+// A: We will infinite loop (depending on if our compiler settings are fast enough)
 static volatile unsigned cnt, period, period_sum;
 
 // client has to define this.
@@ -23,6 +24,9 @@ void interrupt_vector(unsigned pc) {
 
     // Checkoff: add a check to make sure we have a timer interrupt
     // use p 113,114 of broadcom.
+    // A: Check below, we get the Raw IRQ
+    //int x = GET32(arm_timer_RAWIRQ);
+    //printk("\nTimer Interrupt: %d\n", x);
 
     /* 
      * Clear the ARM Timer interrupt - it's the only interrupt we have
@@ -30,6 +34,8 @@ void interrupt_vector(unsigned pc) {
      * caused us to interrupt 
      *
      * Q: what happens, exactly, if we delete?
+     * A: If we comment out/delete, then we just freeze if we don't clear. We keep sending interrupts
+     * but we don't clear them out.
      */
     PUT32(arm_timer_IRQClear, 1);
 
@@ -51,6 +57,7 @@ void interrupt_vector(unsigned pc) {
     last_clk = clk;
 
     // Q: what happens (&why) if you uncomment the print statement?
+    // A: Difference between time is equal to time between interrupts, but not exactly (a bit more)
     // printk("In interrupt handler at time: %d\n", clk);
 }
 
@@ -61,10 +68,12 @@ void notmain() {
 
     printk("setting up timer interrupts\n");
     // Q: if you change 0x100?
+    // A: Longer period between interrupts
     timer_interrupt_init(0x100);
 
     printk("gonna enable ints globally!\n");
     // Q: what happens (&why) if you don't do?
+    // A: We loop infinitely -- need to enable system interrupts, and therefore cnt doesn't increment?
     system_enable_interrupts();
     printk("enabled!\n");
 
@@ -72,11 +81,13 @@ void notmain() {
 
     // Q: what happens if you enable cache?  Why are some parts
     // the same, some change?
-    //enable_cache(); 	
+    // enable_cache(); 	
     unsigned iter = 0, sum = 0;
 #   define N 20
     while(cnt < N) {
         // Q: if you comment this out?  why do #'s change?
+        // A: Maybe you iterate more because printing also takes a non-trivial amount of time,
+        // so thus you can't iterate as much?
         printk("iter=%d: cnt = %d, time between interrupts = %d usec (%x)\n", 
                                     iter,cnt, period,period);
         iter++;

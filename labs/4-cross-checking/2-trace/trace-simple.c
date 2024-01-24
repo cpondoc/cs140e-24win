@@ -64,6 +64,11 @@ static void emit_get32(uint32_t addr, uint32_t val) {
 void __wrap_PUT32(unsigned addr, unsigned val) {
     // XXX: implement this function!
     __real_PUT32(addr, val);
+    if (state == TRACE_ON) {
+        trace_stop();
+        emit_put32(addr, val);
+        trace_start(0);
+    }
 }
 
 // the linker will change all calls to GET32 to call __wrap_GET32
@@ -71,5 +76,10 @@ unsigned __wrap_GET32(unsigned addr) {
     unsigned v = 0;
     // implement this function!
     v = __real_GET32(addr);
+    if (state == TRACE_ON) {
+        trace_stop();
+        emit_get32(addr, v);
+        trace_start(0);
+    }
     return v;
 }

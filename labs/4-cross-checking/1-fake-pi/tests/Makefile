@@ -49,10 +49,10 @@
 
 # 4. do the act tests.  you'll have to add addresses
 # to fake-pi.c
-TEST_SRC :=  $(wildcard ./act-*.c) 
+# TEST_SRC :=  $(wildcard ./act-*.c) 
 
 # 6. then do everything.
-# TEST_SRC := $(wildcard ./[0-5]-*.c) $(wildcard ./prog-*.c)  $(wildcard ./act-*.c) 
+TEST_SRC := $(wildcard ./[0-5]-*.c) $(wildcard ./prog-*.c)  $(wildcard ./act-*.c) 
 
 ###############################################################################
 

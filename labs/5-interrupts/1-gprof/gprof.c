@@ -24,23 +24,36 @@
  *	- gprof_dump will print out all samples.
  */
 
+// Global arrays
+unsigned* table;
+unsigned size;
+
 // allocate table.
 //    few lines of code
 static unsigned gprof_init(void) {
-    unimplemented();
+    // Allocate size, create table
+    size = (__code_end__ - __code_start__) * 4;
+    table = kmalloc(size);
+    return 0;
 }
 
 // increment histogram associated w/ pc.
 //    few lines of code
-static void gprof_inc(unsigned pc) {
-    unimplemented();
+static void gprof_inc(unsigned pc) { 
+    table[(pc - (unsigned)__code_start__) / 4] += 1;
 }
 
 // print out all samples whose count > min_val
 //
 // make sure sampling does not pick this code up!
 static void gprof_dump(unsigned min_val) {
-    unimplemented();
+    system_disable_interrupts();
+    for (unsigned i = 0; i < (size / 4); i++) {
+        if (table[i] > min_val) {
+            printk("\n%p: %d\n", (unsigned *)(__code_start__ + i), table[i]);
+        }
+    }
+    system_enable_interrupts();
 }
 
 

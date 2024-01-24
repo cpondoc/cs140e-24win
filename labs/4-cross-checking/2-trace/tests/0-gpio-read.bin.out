@@ -1,1 +1,1 @@
-TRACE:simple_boot: sending 3260 bytes, crc32=5e27e28a
+TRACE:GET32(0x0x20200034)=0x0xf00081ff

@@ -1,5 +1,7 @@
 {
     "files.associations": {
-        "rpi.h": "c"
+        "rpi.h": "c",
+        "cycle-count.h": "c",
+        "memmap.h": "c"
     }
 }

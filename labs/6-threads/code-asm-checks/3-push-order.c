@@ -1,4 +1,5 @@
 // Q: what order does a push instruction write its registers?
+// A: Smallest register written at lowest address
 #include "rpi.h"
 
 enum { val1 = 0xdeadbeef, val2 = 0xFAF0FAF0 };
@@ -19,14 +20,15 @@ void notmain() {
     assert(res == &v[0]);
 
     // note this also shows you the order of writes.
-    if(v[2] == val2 && v[1] == val1) {
+    //if(v[2] == val2 && v[1] == val1) { -- believe this test is written incorrectly, doesn't actually check for values
+    if(v[1] == val1 && v[0] == val2) {
         assert(v[3] == 4);
         assert(v[0] == 1);
-        todo("what does this imply?\n");
+        trace("Smallest at highest address\n");
     } else if(v[1] == val2 && v[0] == val1) {
         assert(v[3] == 4);
         assert(v[2] == 3);
-        todo("what does this imply?\n");
+        trace("Smallest at lowest address\n");
     } else 
         panic("unexpected result\n");
 }

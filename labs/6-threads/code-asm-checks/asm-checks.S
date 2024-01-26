@@ -11,7 +11,11 @@
 #
 # note: don't trash the sp!
 MK_FN(push_one)
-    asm_todo("implement this!")
+    mov r2, sp
+    mov sp, r0
+    push { r1 }
+    mov r0, sp
+    mov sp, r2
     bx lr
 
 
@@ -20,6 +24,20 @@ MK_FN(push_one)
 #
 # note: don't trash the sp!
 MK_FN(push_two)
+    # Save stack pointer
+    mov r3, sp
+
+    # Move addr into stack pointer
+    mov sp, r0
+
+    # Push both values in
+    push { r1, r2 }
+
+    # Put sp into return value
+    mov r0, sp
+
+    # Restore the stack pointer original value
+    mov sp, r3
     bx lr
 
 MK_FN(check_push_asm)
@@ -101,7 +119,8 @@ MK_FN(write_regs_to_stack)
     @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
     @ push all the callee
     @ store sp into the address held in r0
-    asm_todo(implement this)
+    push { r4, r5, r6, r7, r8, r9, r10, r11, lr }
+    str sp, [r0]
     @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
     mov r0, sp

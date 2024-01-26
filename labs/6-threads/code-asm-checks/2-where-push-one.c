@@ -1,4 +1,5 @@
 // Q: does push change sp before writing to it or after?
+// A: wrote value after modifying pointer
 #include "rpi.h"
 
 enum { val1 = 0xdeadbeef, val2 = 0xFAF0FAF0 };

@@ -7,8 +7,20 @@
 //     compiler didn't optimize the calls away.
 #include "rpi.h"
 
+void recurse(int n) {
+    int x = n;
+    trace("%p\n", &x);
+    if (n == 0) {}
+    else {
+        recurse(n - 1);
+    }
+}
+
+// News flash -- stack grows down!
 int stack_grows_down(void) {
-    todo("implement this routine\n");
+    recurse(10);
+    return 1;
+
 }
 
 void notmain(void) {

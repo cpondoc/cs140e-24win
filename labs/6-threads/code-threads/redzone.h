@@ -22,4 +22,3 @@ static inline void redzone_init(void) {
     assert(redzone_check());
 }
 #endif
-

@@ -32,7 +32,7 @@ MK_FN(rpi_init_trampoline)
     mov r0, r4
     mov r1, r5
 
-    @ go to code
+    @ go to code function (different execution mode)
     blx r1
 
     @ branch and link 

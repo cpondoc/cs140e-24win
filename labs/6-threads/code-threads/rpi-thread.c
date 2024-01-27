@@ -105,14 +105,14 @@ rpi_thread_t *rpi_fork(void (*code)(void *arg), void *arg) {
     // Put stack at the top
     t->saved_sp = &t->stack[0];
 
-    // Store arg and code to saved registers -- PART 2
+    // Store arg and code to saved registers
     t->saved_sp[(THREAD_MAXSTACK - 1) - (8 - R4_OFFSET)] = (uint32_t)arg;
     t->saved_sp[(THREAD_MAXSTACK - 1) - (8 - R5_OFFSET)] = (uint32_t)code;
 
     // Store the address of trampoline into the LR position
     t->saved_sp[(THREAD_MAXSTACK - 1) - (8 - LR_OFFSET)] = (uint32_t)&rpi_init_trampoline;
 
-    // Updaete the last part
+    // Update the saved stack pointer to the end of registers (stack grows downward)
     t->saved_sp = &t->stack[THREAD_MAXSTACK - 1 - (8 - R4_OFFSET)];
 
     th_trace("rpi_fork: tid=%d, code=[%p], arg=[%x], saved_sp=[%p]\n",
@@ -133,12 +133,16 @@ void rpi_exit(int exitcode) {
     // If empty -- switch from curr thread to scheduler, and free
     if (Q_empty(&runq)) {
         th_free(cur_thread);
+
+        // Make sure to trace, as well!
         th_trace("done running threads, back to scheduler\n");
         rpi_cswitch(&cur_thread->saved_sp, scheduler_thread->saved_sp);
     } else {
-        // Else, we get the new thread, and free
+        // Else, we get the new thread, and set to cur_thread
         rpi_thread_t *old_thread = cur_thread;
         cur_thread = Q_pop(&runq);
+
+        // Context switch to the new cur_thread
         th_free(old_thread);
         rpi_cswitch(&old_thread->saved_sp, cur_thread->saved_sp);
     }
@@ -162,16 +166,14 @@ void rpi_yield(void) {
         return;
     }
 
-    // if you switch, print the statement:
-    //th_trace("switching from tid=%d to tid=%d\n", old->tid, t->tid);
-
+    // Add current thread to the back of the runq
     Q_append(&runq, cur_thread);
     rpi_thread_t *old_thread = cur_thread;
+
+    // Context switch to the new thread (and set cur_thread correctly!)
     cur_thread = Q_pop(&runq);
     th_trace("switching from tid=%d to tid=%d\n", old_thread->tid, cur_thread->tid);
     rpi_cswitch(&old_thread->saved_sp, cur_thread->saved_sp);
-
-    //todo("implement the rest of rpi_yield");
 }
 
 /*
@@ -192,7 +194,7 @@ void rpi_thread_start(void) {
     if(!scheduler_thread)
         scheduler_thread = th_alloc();
 
-    // Pop, switch, then free
+    // Pop and then switch -- don't free!
     cur_thread = Q_pop(&runq);
     rpi_cswitch(&scheduler_thread->saved_sp, cur_thread->saved_sp);
 

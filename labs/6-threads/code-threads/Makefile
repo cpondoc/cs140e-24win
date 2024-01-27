@@ -29,12 +29,12 @@ STAFF_OBJS += staff-kmalloc.o
 # checkoff skips 1 since behavior changes
 
 # the different tests: start with 1, then 2, then..
-PROGS = $(wildcard ./7-test*.c)
-PROGS = $(wildcard ./6-test*.c)
-PROGS = $(wildcard ./5-test*.c)
+# PROGS = $(wildcard ./7-test*.c)
+# PROGS = $(wildcard ./6-test*.c)
+# PROGS = $(wildcard ./5-test*.c)
 # ...
-PROGS = $(wildcard ./4-test*.c)
-PROGS = $(wildcard ./1-test*.c)
+# PROGS = $(wildcard ./4-test*.c)
+# PROGS = $(wildcard ./1-test*.c)
 
 # all the tests.  
 PROGS = $(wildcard ./[234567]-test*.c)

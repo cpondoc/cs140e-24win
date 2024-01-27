@@ -2,6 +2,15 @@
     "files.associations": {
         "rpi.h": "c",
         "cycle-count.h": "c",
-        "memmap.h": "c"
+        "memmap.h": "c",
+        "__bit_reference": "c",
+        "__hash_table": "c",
+        "__split_buffer": "c",
+        "array": "c",
+        "iterator": "c",
+        "string": "c",
+        "string_view": "c",
+        "unordered_map": "c",
+        "vector": "c"
     }
 }

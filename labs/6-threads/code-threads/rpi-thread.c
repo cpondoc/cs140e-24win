@@ -102,7 +102,18 @@ rpi_thread_t *rpi_fork(void (*code)(void *arg), void *arg) {
      *  3. store the address of rpi_init_trampoline into the lr
      *     position so context switching will jump there.
      */
-    todo("initialize thread stack");
+    // Put stack at the top
+    t->saved_sp = &t->stack[0];
+
+    // Store arg and code to saved registers -- PART 2
+    t->saved_sp[(THREAD_MAXSTACK - 1) - (8 - R4_OFFSET)] = (uint32_t)arg;
+    t->saved_sp[(THREAD_MAXSTACK - 1) - (8 - R5_OFFSET)] = (uint32_t)code;
+
+    // Store the address of trampoline into the LR position
+    t->saved_sp[(THREAD_MAXSTACK - 1) - (8 - LR_OFFSET)] = (uint32_t)&rpi_init_trampoline;
+
+    // Updaete the last part
+    t->saved_sp = &t->stack[THREAD_MAXSTACK - 1 - (8 - R4_OFFSET)];
 
     th_trace("rpi_fork: tid=%d, code=[%p], arg=[%x], saved_sp=[%p]\n",
             t->tid, code, arg, t->saved_sp);
@@ -119,9 +130,18 @@ rpi_thread_t *rpi_fork(void (*code)(void *arg), void *arg) {
 void rpi_exit(int exitcode) {
     redzone_check(0);
 
-    // when you switch back to the scheduler thread:
-    //      th_trace("done running threads, back to scheduler\n");
-    todo("implement rpi_exit");
+    // If empty -- switch from curr thread to scheduler, and free
+    if (Q_empty(&runq)) {
+        th_free(cur_thread);
+        th_trace("done running threads, back to scheduler\n");
+        rpi_cswitch(&cur_thread->saved_sp, scheduler_thread->saved_sp);
+    } else {
+        // Else, we get the new thread, and free
+        rpi_thread_t *old_thread = cur_thread;
+        cur_thread = Q_pop(&runq);
+        th_free(old_thread);
+        rpi_cswitch(&old_thread->saved_sp, cur_thread->saved_sp);
+    }
 
     // should never return.
     not_reached();
@@ -136,10 +156,22 @@ void rpi_exit(int exitcode) {
 //        make sure to set cur_thread correctly!
 void rpi_yield(void) {
     redzone_check(0);
-    // if you switch, print the statement:
-    //     th_trace("switching from tid=%d to tid=%d\n", old->tid, t->tid);
 
-    todo("implement the rest of rpi_yield");
+    // If runq is empty, just return
+    if (Q_empty(&runq)) {
+        return;
+    }
+
+    // if you switch, print the statement:
+    //th_trace("switching from tid=%d to tid=%d\n", old->tid, t->tid);
+
+    Q_append(&runq, cur_thread);
+    rpi_thread_t *old_thread = cur_thread;
+    cur_thread = Q_pop(&runq);
+    th_trace("switching from tid=%d to tid=%d\n", old_thread->tid, cur_thread->tid);
+    rpi_cswitch(&old_thread->saved_sp, cur_thread->saved_sp);
+
+    //todo("implement the rest of rpi_yield");
 }
 
 /*
@@ -150,7 +182,6 @@ void rpi_yield(void) {
  * should work even if the runq is empty.
  */
 void rpi_thread_start(void) {
-    redzone_init();
     th_trace("starting threads!\n");
 
     // no other runnable thread: return.
@@ -161,7 +192,10 @@ void rpi_thread_start(void) {
     if(!scheduler_thread)
         scheduler_thread = th_alloc();
 
-    todo("implement the rest of rpi_thread_start");
+    // Pop, switch, then free
+    cur_thread = Q_pop(&runq);
+    rpi_cswitch(&scheduler_thread->saved_sp, cur_thread->saved_sp);
+
 
 end:
     redzone_check(0);

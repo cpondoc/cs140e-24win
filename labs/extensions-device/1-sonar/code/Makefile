@@ -10,7 +10,7 @@ COMMON_SRC := hc-sr04.c
 
 # to make sure you only use your code, comment 
 # this out with a '#'
-STAFF_OBJS = staff-hc-sr04.o 
+# STAFF_OBJS = staff-hc-sr04.o 
 
 # define this if you need to give the device for your pi
 TTYUSB = 

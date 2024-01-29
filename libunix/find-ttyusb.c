@@ -2,6 +2,7 @@
 #include <assert.h>
 #include <fcntl.h>
 #include <string.h>
+#include <sys/stat.h>
 
 #include "libunix.h"
 
@@ -60,12 +61,80 @@ char *find_ttyusb(void) {
 // mounted last).  use the modification time 
 // returned by state.
 char *find_ttyusb_last(void) {
-    unimplemented();
+    // Scan through all devices, first
+    char *name = "";
+    struct dirent **file_list;
+    int num_files = scandir("/dev", &file_list, filter, alphasort);
+
+    // Next, check which strings have been received recently
+    int smallest_time = -1;
+    if (num_files > 0) {
+        char *smallest = NULL;
+        for (int i = 0; i < num_files; i++) {
+            // Form file name
+            const char* directory_name = file_list[i]->d_name;
+            char *prefix = "/dev/";
+            char name[1030] = "";
+            strcpy(name, prefix);
+            strcat(name, directory_name);
+        
+            // Get file information
+            struct stat stats;
+            int result = stat(name, &stats);
+            if (result == 0) {
+                // Update modification time
+                int mod_time = stats.st_mtime;
+                if (smallest_time == -1 || mod_time > smallest_time) {
+                    smallest_time = mod_time;
+                    smallest = name;
+                }
+            }
+        }
+
+        // Save new file name
+        name = (char*)malloc(strlen(smallest) + 1);
+        strcpy(name, smallest);
+    }
+    return name;
 }
 
 // return the oldest mounted ttyusb (the one mounted
 // "first") --- use the modification returned by
 // stat()
 char *find_ttyusb_first(void) {
-    unimplemented();
+    // Scan through all devices, first
+    char *name = "";
+    struct dirent **file_list;
+    int num_files = scandir("/dev", &file_list, filter, alphasort);
+
+    // Next, check which strings have been received recently
+    int smallest_time = -1;
+    if (num_files > 0) {
+        char *smallest = NULL;
+        for (int i = 0; i < num_files; i++) {
+            // Form file name
+            const char* directory_name = file_list[i]->d_name;
+            char *prefix = "/dev/";
+            char name[1030] = "";
+            strcpy(name, prefix);
+            strcat(name, directory_name);
+        
+            // Get file information
+            struct stat stats;
+            int result = stat(name, &stats);
+            if (result == 0) {
+                // Update modification time
+                int mod_time = stats.st_mtime;
+                if (smallest_time == -1 || mod_time < smallest_time) {
+                    smallest_time = mod_time;
+                    smallest = name;
+                }
+            }
+        }
+
+        // Save new file name
+        name = (char*)malloc(strlen(smallest) + 1);
+        strcpy(name, smallest);
+    }
+    return name;
 }

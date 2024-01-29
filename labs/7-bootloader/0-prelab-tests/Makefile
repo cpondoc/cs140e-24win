@@ -2,6 +2,8 @@ PROGS += 0-read-test.c
 PROGS += 1-read-test.c 
 # note: you can't do "make check" for this one.
 PROGS += 0-tty-test.c
+PROGS += 1-tty-test.c
+PROGS += 2-tty-test.c
 COMMON_SRC = 
 
 ifdef CS140E_STAFF

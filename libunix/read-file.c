@@ -18,14 +18,39 @@
 //     matter for later labs).
 // 
 void *read_file(unsigned *size, const char *name) {
-    // How: 
-    //    - use stat() to get the size of the file.
-    //    - round up to a multiple of 4.
-    //    - allocate a buffer
-    //    - zero pads to a multiple of 4.
-    //    - read entire file into buffer (read_exact())
-    //    - fclose() the file descriptor
-    //    - make sure any padding bytes have zeros.
-    //    - return it.   
-    unimplemented();
+    // Set up helper variables
+    struct stat stats;
+    void *buffer = NULL;
+
+    // Use stat to get results on files
+    int result = stat(name, &stats);
+    if (result == 0) {
+        int file_size = stats.st_size;
+        
+        // Round up to a multiple of 4
+        int original_file_size = file_size;
+        file_size += 4;
+        file_size -= (file_size % 4);
+
+        // Allocate a buffer, zero pad to the next multiple of 4
+        buffer = calloc(file_size + 4, sizeof(int));
+        if (original_file_size == 0) {
+            *size = file_size;
+            return buffer;
+        }
+
+        // Read in file
+        FILE* file = fopen(name, "r");
+        int fd = fileno(file);
+        printf("\nOriginal File Size: %d\n", file_size);
+        int reading = read_exact(fd, buffer, original_file_size);
+
+        // Close file descriptor, set size
+        fclose(file);
+        *size = reading;
+        return buffer;
+    }
+
+    // Dummy return
+    return buffer;
 }

@@ -42,7 +42,6 @@ void *read_file(unsigned *size, const char *name) {
         // Read in file
         FILE* file = fopen(name, "r");
         int fd = fileno(file);
-        printf("\nOriginal File Size: %d\n", file_size);
         int reading = read_exact(fd, buffer, original_file_size);
 
         // Close file descriptor, set size

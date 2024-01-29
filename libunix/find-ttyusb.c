@@ -19,7 +19,14 @@ static const char *ttyusb_prefixes[] = {
 static int filter(const struct dirent *d) {
     // scan through the prefixes, returning 1 when you find a match.
     // 0 if there is no match.
-    unimplemented();
+    for (int i = 0; i < 4; i++) {
+        // Check through the two strings, check
+        // https://stackoverflow.com/questions/4770985/how-to-check-if-a-string-starts-with-another-string-in-c
+        if (strncmp(ttyusb_prefixes[i], d->d_name, strlen(ttyusb_prefixes[i])) == 0) {
+            return 1;
+        }
+    }
+    return 0;
 }
 
 // find the TTY-usb device (if any) by using <scandir> to search for
@@ -30,7 +37,23 @@ static int filter(const struct dirent *d) {
 char *find_ttyusb(void) {
     // use <alphasort> in <scandir>
     // return a malloc'd name so doesn't corrupt.
-    unimplemented();
+    // Use <scandir> to search for devices
+    char *name = "";
+    struct dirent **file_list;
+    int num_files = scandir("/dev", &file_list, filter, alphasort);
+    if (num_files > 0) {
+        // Malloc a string name
+        const char* directory_name = file_list[0]->d_name;
+        char *prefix = "/dev/";
+        name = (char*)malloc(7 + strlen(directory_name));
+
+        // Copy over text
+        strcpy(name, prefix);
+        strcat(name, directory_name);
+        return name;
+    }
+    
+    return name;
 }
 
 // return the most recently mounted ttyusb (the one

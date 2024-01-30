@@ -1,13 +1,13 @@
 # need the makefile to give an error if this doesn't exist
 PROGS := main.c
-COMMON_SRC := get-code.c
+COMMON_SRC := 
 
 # hmm.  not sure about this.
 BUILD_DIR = ./objs
 START := $(BUILD_DIR)/boot-start.o
 
-# uncomment if you want it to automatically run.
-# RUN=1
+# we can't bootload the bootloader.
+RUN=0
 
 # define this if you need to give the device for your pi
 TTYUSB = 

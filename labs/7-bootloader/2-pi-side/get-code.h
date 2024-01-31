@@ -18,6 +18,7 @@
 #define __GETCODE_H__
 #include "boot-crc32.h"  // has the crc32 implementation.
 #include "boot-defs.h"   // protocol opcode values.
+#include "memmap.h"
 
 /***************************************************************
  * Helper routines.  You shouldn't need to modify these for
@@ -115,7 +116,19 @@ boot_err(uint32_t error_opcode, const char *msg) {
 //     counter can overflow.
 static unsigned 
 has_data_timeout(unsigned timeout) {
-    boot_todo("has_data_timeout: implement this routine");
+    uint32_t s = timer_get_usec();
+    while (1) {
+        // Check for data
+        if (uart_has_data() == 1) {
+            return 1;
+        }
+        
+        // Check timeout
+        uint32_t e = timer_get_usec();
+        if ((e - s) >= timeout) {
+            return 0;
+        }
+    }
     return 0;
 }
 
@@ -137,7 +150,7 @@ static void wait_for_data(unsigned usec_timeout) {
         boot_put32(GET_PROG_INFO);
     } while(!has_data_timeout(usec_timeout));
     return;
-    boot_todo("wait_for_data: implement this routine");
+    // boot_todo("wait_for_data: implement this routine");
 }
 
 // IMPLEMENT this routine.
@@ -152,10 +165,20 @@ uint32_t get_code(void) {
      * Add your code below: 2,3,4,5,6
      */
     uint32_t addr = 0;
+    uint32_t op;
 
     // 2. expect: [PUT_PROG_INFO, addr, nbytes, cksum] 
     //    we echo cksum back in step 4 to help debugging.
-    boot_todo("wait for laptop/server response: echo checksum back");
+    // boot_todo("wait for laptop/server response: echo checksum back");
+    // Check PUT_PROG_INFO
+    if ((op = boot_get32()) != PUT_PROG_INFO) {
+        boot_err(BOOT_ERROR, "Did not get the right op code :(");
+    }
+
+    // Check for addr, nbytes, and cksum
+    addr = boot_get32();
+    uint32_t nbytes = boot_get32();
+    uint32_t cksum = boot_get32();
 
     // 3. If the binary will collide with us, abort with a BOOT_ERROR. 
     // 
@@ -170,26 +193,60 @@ uint32_t get_code(void) {
     //       - libpi/include/memmap.h
     //       - libpi/memmap 
     //    for definitions.
-    boot_todo("check that binary will not hit the bootloader code");
+    
+    // Check the binary
+    uint32_t put_32_addr = 0x0020000c;
+    if (addr >= put_32_addr && addr <= (uint32_t) __prog_end__) {
+        boot_put32(BOOT_ERROR);
+        rpi_reboot();
+    }
+
+    if (addr + nbytes >= put_32_addr && addr + nbytes <= (uint32_t)__prog_end__) {
+        boot_put32(BOOT_ERROR);
+        rpi_reboot();
+    }
+
 
     // 4. send [GET_CODE, cksum] back.
-    boot_todo("send [GET_CODE, cksum] back\n");
+    boot_put32(GET_CODE);
+    boot_put32(cksum);
+    //boot_todo("send [GET_CODE, cksum] back\n");
 
     // 5. we expect: [PUT_CODE, <code>]
     //  read each sent byte and write it starting at 
     //  <addr> using PUT8
     //
     // common mistake: computing the offset incorrectly.
-    boot_todo("boot_get8() each code byte and use PUT8() to write it to memory");
+    // Check PUT_PROG_INFO
+    if ((op = boot_get32()) != PUT_CODE) {
+        boot_err(BOOT_ERROR, "Did not get the right op code :(");
+    }
+
+    // Writing to an address
+    uint32_t old_addr = addr;
+    uint32_t old_bytes = nbytes;
+    while (nbytes > 0) {
+        uint8_t code = boot_get8();
+        PUT8(addr, code);
+        addr++;
+        nbytes -= 1;
+    }
+
+    // boot_todo("boot_get8() each code byte and use PUT8() to write it to memory");
 
     // 6. verify the cksum of the copied code using:
     //         boot-crc32.h:crc32.
     //    if fails, abort with a BOOT_ERROR.
-    boot_todo("verify the checksum of copied code");
+    if (crc32((uint8_t *)old_addr, old_bytes) != cksum) {
+        boot_putk("Issue with cksum?");
+        boot_put32(BOOT_ERROR);
+        rpi_reboot();
+    }
+    // boot_todo("verify the checksum of copied code");
 
     // 7. send back a BOOT_SUCCESS!
-    boot_putk("<PUT YOUR NAME HERE>: success: Received the program!");
-    boot_todo("fill in your name above");
+    boot_putk("Chris Pondoc: success: Received the program!");
+    //boot_todo("fill in your name above");
 
     // woo!
     boot_put32(BOOT_SUCCESS);
@@ -202,6 +259,7 @@ uint32_t get_code(void) {
     // delay_ms(500);
     uart_flush_tx();
 
+    addr = old_addr;
     return addr;
 }
 #endif

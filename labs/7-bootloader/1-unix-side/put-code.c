@@ -170,19 +170,36 @@ void simple_boot(int fd, uint32_t boot_addr, const uint8_t *buf, unsigned n) {
     } 
 
     // 1. reply to the GET_PROG_INFO
-    todo("reply to GET_PROG_INFO");
+    trace_put32(fd, PUT_PROG_INFO);
+    trace_put32(fd, boot_addr);
+    trace_put32(fd, n);
+    trace_put32(fd, crc32(buf,n));
 
     // 2. drain any extra GET_PROG_INFOS
-    todo("drain any extra GET_PROG_INFOS");
+    while((op = get_op(fd)) == GET_PROG_INFO);
 
     // 3. check that we received a GET_CODE
-    todo("check that we received a GET_CODE");
-
-    // 4. handle it: send a PUT_CODE + the code.
-    todo("send PUT_CODE + the code in <buf>");
+    if (op == GET_CODE) {
+        // We first check for comparison of CRC
+        uint32_t crc = trace_get32(fd);
+        if (crc == crc32(buf, n)) {
+            
+            // 4. handle it: send a PUT_CODE + the code.
+            trace_put32(fd, PUT_CODE);
+            for (int i = 0; i < n; i++) {
+                trace_put8(fd, buf[i]);
+            }
+        } else {
+            panic("Checksums don't match!");
+        }
+    } else {
+        panic("Did not get GET_CODE!");
+    }
 
     // 5. Wait for BOOT_SUCCESS
-    todo("wait for BOOT_SUCCESS");
+    while ((op = get_op(fd)) != BOOT_SUCCESS) {
+        get_uint8(fd);
+    } 
 
     boot_output("bootloader: Done.\n");
 }

@@ -4,6 +4,7 @@
 
 int open_tty_n(const char *device, int maxattempts) {
     int fd;
+    output("Device: %s\n", device);
     for(int i = 0; i < maxattempts; i++) {
         if((fd = open(device, O_RDWR | O_NOCTTY | O_SYNC)) >= 0) {
             output("opened tty port <%s>.\n", device);

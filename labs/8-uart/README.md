@@ -60,7 +60,7 @@ Show that:
       commands.  Don't keep re-typing-out `cd ../../../libpi` and `cd
       ../labs/8-uart/whatever`; that's a waste of your lab time.
   
-   2. `1-uart`: `make checkoff` passes.  You should first ensure you
+   2. `2-uart`: `make checkoff` passes.  You should first ensure you
        can pass the tests one by one to make debugging easier.
      
       Your `uart.c` code should make it clear why you did what you did,
@@ -300,7 +300,7 @@ General approach for `uart_init`:
      control.
   6. Enable tx/rx.  It should be working!
 
-If you run `make` in `4-uart/1-uart` it will build:
+If you run `make` in `4-uart/2-uart` it will build:
   - A simple `hello` you can use to test. I'd suggest shipping it over with your
     bootloader.  
 
@@ -311,52 +311,99 @@ A possibly-nasty issue:
     to work when it does not.
 
   2. To get around this issue, when everything seems to work, change
-     the `Makefile` to use `hello-disable.c` instead of `hello.c`
+     the `Makefile` to use `output-test-1-hello-disable.c`.
      This will repeatedly disable and enable the uart --- not a perfect
      test, but a bit more rigorous.
  
   3. Once your code works, make swap out the `uart.c` in the `libpi/Makefile`
-     to use yours:  copy `uart.c` to `src/uart.c`, remove it from the current
-     `1-uart/Makefile`, recompile.
+     to use yours:  remove it from the current
+     `2-uart/Makefile`, recompile.
 
-  4. Make sure `make check` for the tests in lab 3 still work.
-     and see that it boots the `hello` you used above.
+        # libpi/Makefile
+        SRC += ../labs/8-uart/2-uart/uart.c
+
+  4. Make sure `make check` for the tests still work.
 
 -----------------------------------------------------------------------
-### Part 2. re-install your bootloader with the new uart code.
+### Part 3. re-install your bootloader with the new uart code.
 
 Now change your bootloader to use the new `uart.c`:
 
-  1. Copy `uart.c` into `libpi/src` and update your libpi `Makefile`.
+  1. Add your `uart.c` to your `libpi/Makefile`.
+
+        SRC += ../labs/8-uart/2-uart/uart.c
+
   2. Add `UART` to to your bootloader where it prints your name and recompile.
   3. Copy it as `kernel.img` to your SD card.
   4. Nothing you changed should have made any difference in behavior.
-     So: Make sure that `1-uart` tests still pass after replacing the
+     So: Make sure that `2-uart` tests still pass after replacing the
      bootloader.
      Then do `make checkoff` in the previous lab `7-bootloader/checkoff`
      to make sure they still work, too.
   
 -----------------------------------------------------------------------
-##### Part 3. `2-fake-pi`
+##### Part 3. `3-fake-pi`
 
-The fake pi is in `2-fake-pi`.
 
-  1. You'll have to modify the `Makefile` so that it knows where to find your
-     `uart.c`.  If you give it the path, it should work.  If not let me know.
+For the output I get:
+```
+        % cd 3-fake-pi
+        % make
+        % cd tests-uart
+        % make
+        % make emit
+        % make checkoff
 
-     `cd` into `tests-uart` and run the test for `0-uart-init.c`.  You
-     may have addresses written in order (there are multiple legal 
-     orders). If you don't match ours,  check with someone else and
-     have some reason that the reorder you do is ok.
+        individual checksums = 
+        852325631 5396 0-uart-getc.out
+        1030750329 808 0-uart-init.out
+        1334889765 1577 1-hello.out
+        3030943895 229 0-uart-putc.out
+        checksum(checksum) = 
+        2291128381 121
+
+```
+
+You might get different output if you use different registers.  Check with
+your partner!
+
+
+The first part of  my `3-fake-pi/tests-uart/0-uart-init.out`:
+
+```
+    TRACE: out file for <0-uart-init>
+    TRACE:0: calling pi code
+    TRACE:1: dev_barrier 
+    TRACE:2: GET32(0x20200004) = 0x643c9869
+    TRACE:3: PUT32(0x20200004) = 0x643ca869
+    TRACE:4: GET32(0x20200004) = 0x643ca869
+    TRACE:5: PUT32(0x20200004) = 0x643d2869
+    TRACE:6: dev_barrier 
+    TRACE:7: GET32(0x20215004) = 0x0
+    TRACE:8: PUT32(0x20215004) = 0x1
+    TRACE:9: dev_barrier 
+    TRACE:10: UART: PUT32(0x20215060) = 0x0 
+    TRACE:11: UART: turning UART off PUT32(20215060)=0
+    ...
+```
+
+Some notes:
+
+  1.  If you look in the `3-fake-pi/Makefile` you see it's getting your
+      `gpio.c` and `uart.c` and pulling them into fake-pi.
+
+  2. If you look in fakepi you see there is some logic to buffer
+     the UART writes while the tx and rx is disabled (the control
+     register). When the control is turned on, all buffered writes 
+     get written.
+
+  3. `cd` into `3-fake-pi/tests-uart` and run the test for
+     `0-uart-init.c`.  You may have addresses written in order (there
+     are multiple legal orders). If you don't match ours,  check with
+     someone else and have some reason that the reorder you do is ok.
 
      You'll have to compare your `.out` files with other people.  You
      probably want to run these by hand one at a time.
-
-     NOTE: A big disadvantage of these checks is that they require
-     the same reads and writes be done in the same order.  This is
-     unrealistic and makes checking kinda of a pain.   We will fix this
-     in the homework.
-
 
 <p align="center">
   <img src="images/rpi-cables.png" width="450" />

@@ -14,7 +14,6 @@
 //
 #include "rpi.h"
 #include "gpio.h"
-#include "sw-uart.h"
 
 // called first to setup uart to 8n1 115200  baud,
 // no interrupts.
@@ -37,14 +36,15 @@ void uart_init(void) {
     dev_barrier();
 
     // Immediately disable tx/rx (you don't want to send garbage).
+    // Can also be get 8?
     uint32_t CNTL_REG = 0x20215060;
-    curr_value = GET8(CNTL_REG);
+    curr_value = GET32(CNTL_REG);
     curr_value = curr_value & ~0b11;
-    PUT8(CNTL_REG, curr_value);
+    PUT32(CNTL_REG, curr_value);
 
     // Clearing the FIFOs
     uint32_t IIR_REG = 0x20215048;
-    PUT32(IIR_REG, 0b11000001);
+    PUT32(IIR_REG, 0b11000111);
 
     // Disable interrupts
     uint32_t IER_REG = 0x20215044;
@@ -69,15 +69,10 @@ void uart_init(void) {
 // disable the uart.
 void uart_disable(void) {
     dev_barrier();
-    uint32_t CNTL_REG = 0x20215060;
-    uint8_t curr_value = GET8(CNTL_REG);
-    curr_value = curr_value & ~0b11;
-    PUT8(CNTL_REG, curr_value);
-    dev_barrier();
+    uart_flush_tx();
 
     uint32_t AUX_ENB = 0x20215004;
-    dev_barrier();
-    curr_value = GET8(AUX_ENB);
+    uint32_t curr_value = GET8(AUX_ENB);
     curr_value = curr_value & ~0b1;
     PUT8(AUX_ENB, curr_value);
     dev_barrier();
@@ -136,8 +131,8 @@ int uart_get8_async(void) {
 
 // 1 = tx queue empty, 0 = not empty.
 int uart_tx_is_empty(void) {
-    //todo("Must implement");
-    unimplemented();
+    uint32_t LSR_REG = 0x20215054;
+    return ((GET8(LSR_REG) & 0b1000000) > 0);
 }
 
 // flush out all bytes in the uart --- we use this when 

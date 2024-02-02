@@ -4,7 +4,7 @@ PROGS = $(wildcard ./input-test*.c)
 
 PROGS = $(wildcard ./output-test*.c)
 # easiest output
-PROGS = $(wildcard ./output-test-0-hello.c)
+#PROGS = $(wildcard ./output-test-0-hello.c)
 
 COMMON_SRC = cstart.c
 # if you commment this out, will be using our libpi version: should pass!

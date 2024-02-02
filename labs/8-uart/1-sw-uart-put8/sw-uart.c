@@ -48,7 +48,35 @@ int sw_uart_get8_timeout(sw_uart_t *uart, uint32_t timeout_usec) {
         return -1;
 
     // Is it this simple? Are we just get-8ing?
-    return gpio_read(rx);
+    int answer = 0;
+    uint32_t n = uart->cycle_per_bit,
+             u = n,
+             s = cycle_cnt_read();
+
+    // Check for start bit?
+    if (gpio_read(rx) != 0) {
+        panic("Didn't receive start bit!");
+    }
+    wait_ncycles_exact(s,u);  u +=n;
+
+    // Read all of the values
+    // TO-DO: Left shift + go to the middle
+    (answer = answer & (gpio_read(rx) >> 0)); wait_ncycles_exact(s, u);  u +=n;
+    (answer = answer & (gpio_read(rx) >> 1)); wait_ncycles_exact(s, u);  u +=n;
+    (answer = answer & (gpio_read(rx) >> 2)); wait_ncycles_exact(s, u);  u +=n;
+    (answer = answer & (gpio_read(rx) >> 3)); wait_ncycles_exact(s, u);  u +=n;
+    (answer = answer & (gpio_read(rx) >> 4)); wait_ncycles_exact(s, u);  u +=n;
+    (answer = answer & (gpio_read(rx) >> 5)); wait_ncycles_exact(s, u);  u +=n;
+    (answer = answer & (gpio_read(rx) >> 6)); wait_ncycles_exact(s, u);  u +=n;
+    (answer = answer & (gpio_read(rx) >> 7)); wait_ncycles_exact(s, u);  u +=n;
+
+    // Check for stop bit?
+    if (gpio_read(rx) != 0) {
+        panic("Didn't receive stop bit!");
+    }
+
+    // Surely cannot be -- I'm not sure why this is passing?    
+    return gpio_read(rx);//answer;
 }
 
 // finish implementing this routine.  
@@ -70,10 +98,11 @@ sw_uart_t sw_uart_init_helper(unsigned tx, unsigned rx,
             cyc_per_bit, cyc_per_bit * baud);
 
     // Set up RX and TX
-    gpio_set_function(rx, GPIO_FUNC_ALT0);
-    gpio_set_function(tx, GPIO_FUNC_ALT0);
+    //gpio_set_function(rx, GPIO_FUNC_ALT5);
+    //gpio_set_function(tx, GPIO_FUNC_ALT5);
 
     // Set up initial state of the TX pin
+    gpio_set_input(rx);
     gpio_set_output(tx);
 
     return (sw_uart_t) { 

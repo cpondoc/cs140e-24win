@@ -5,8 +5,14 @@
 
 #include <stdarg.h>
 
+// Added this to get access to cycles exact
+#include "wait-routines.h"
+
 // do this first: used timed_write to cleanup.
 //  recall: time to write each bit (0 or 1) is in <uart->usec_per_bit>
+/*
+Note: dropping in bitbanged code
+*/
 void sw_uart_put8(sw_uart_t *uart, uint8_t c) {
     // use local variables to minimize any loads or stores
     int tx = uart->tx;
@@ -14,7 +20,21 @@ void sw_uart_put8(sw_uart_t *uart, uint8_t c) {
              u = n,
              s = cycle_cnt_read();
 
-    todo("implement this code\n");
+    // start bit (default is 1, so start = writing 0.
+    gpio_write(tx,0); wait_ncycles_exact(s,u);  u +=n;
+
+    // the byte.
+    gpio_write(tx, (c>> 0)&1); wait_ncycles_exact(s, u);  u +=n;
+    gpio_write(tx, (c>> 1)&1); wait_ncycles_exact(s, u);  u +=n;
+    gpio_write(tx, (c>> 2)&1); wait_ncycles_exact(s, u);  u +=n;
+    gpio_write(tx, (c>> 3)&1); wait_ncycles_exact(s, u);  u +=n;
+    gpio_write(tx, (c>> 4)&1); wait_ncycles_exact(s, u);  u +=n;
+    gpio_write(tx, (c>> 5)&1); wait_ncycles_exact(s, u);  u +=n;
+    gpio_write(tx, (c>> 6)&1); wait_ncycles_exact(s, u);  u +=n;
+    gpio_write(tx, (c>> 7)&1); wait_ncycles_exact(s, u);  u +=n;
+
+    // stop bit (has to be 1 for at least n cycles)
+    gpio_write(tx,1); wait_ncycles_exact(s,u); 
 }
 
 // do this second: you can type in pi-cat to send stuff.
@@ -27,7 +47,8 @@ int sw_uart_get8_timeout(sw_uart_t *uart, uint32_t timeout_usec) {
     while(!wait_until_usec(rx, 0, timeout_usec))
         return -1;
 
-    todo("implement this code\n");
+    // Is it this simple? Are we just get-8ing?
+    return gpio_read(rx);
 }
 
 // finish implementing this routine.  
@@ -48,7 +69,12 @@ sw_uart_t sw_uart_init_helper(unsigned tx, unsigned rx,
         panic("too much diff: cyc_per_bit = %d * baud = %d\n", 
             cyc_per_bit, cyc_per_bit * baud);
 
-    todo("setup rx,tx and initial state of tx pin.");
+    // Set up RX and TX
+    gpio_set_function(rx, GPIO_FUNC_ALT0);
+    gpio_set_function(tx, GPIO_FUNC_ALT0);
+
+    // Set up initial state of the TX pin
+    gpio_set_output(tx);
 
     return (sw_uart_t) { 
             .tx = tx, 

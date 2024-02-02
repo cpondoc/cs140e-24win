@@ -1,0 +1,132 @@
+TRACE: out file for <1-hello>
+TRACE:0: calling pi code
+TRACE:1: dev_barrier 
+TRACE:2: GET32(0x20200004) = 0x643c9869
+TRACE:3: PUT32(0x20200004) = 0x643d1869
+TRACE:4: GET32(0x20200004) = 0x643d1869
+TRACE:5: PUT32(0x20200004) = 0x643d2869
+TRACE:6: dev_barrier 
+TRACE:7: GET32(0x20215004) = 0x0
+TRACE:8: PUT32(0x20215004) = 0x1
+TRACE:9: dev_barrier 
+TRACE:10: UART: PUT32(0x20215060) = 0x0 
+TRACE:11: UART: turning UART off PUT32(20215060)=0
+TRACE:12: UART: PUT32(0x20215044) = 0x0 
+TRACE:13: UART: PUT32(0x20215048) = 0x6 
+TRACE:14: UART: PUT32(0x2021504c) = 0x3 
+TRACE:15: UART: PUT32(0x20215050) = 0x0 
+TRACE:16: UART: PUT32(0x20215060) = 0x3 
+TRACE:17: UART: PUT32(0x20215068) = 0x10e 
+TRACE:18: UART: turned UART on PUT32(20215060)=3
+TRACE:19: dev_barrier 
+TRACE:20: dev_barrier 
+TRACE:21: dev_barrier 
+TRACE:22: GET32(0x20215064) = 0x515f007c
+TRACE:23: dev_barrier 
+TRACE:24: dev_barrier 
+TRACE:25: GET32(0x20215064) = 0x515f007c
+TRACE:26: dev_barrier 
+TRACE:27: dev_barrier 
+TRACE:28: GET32(0x20215064) = 0x515f007c
+TRACE:29: dev_barrier 
+TRACE:30: dev_barrier 
+TRACE:31: GET32(0x20215064) = 0x515f007c
+TRACE:32: dev_barrier 
+TRACE:33: dev_barrier 
+TRACE:34: GET32(0x20215064) = 0x515f007c
+TRACE:35: dev_barrier 
+TRACE:36: dev_barrier 
+TRACE:37: GET32(0x20215064) = 0x515f007c
+TRACE:38: dev_barrier 
+TRACE:39: dev_barrier 
+TRACE:40: GET32(0x20215064) = 0x515f007c
+TRACE:41: dev_barrier 
+TRACE:42: dev_barrier 
+TRACE:43: GET32(0x20215064) = 0x515f007c
+TRACE:44: dev_barrier 
+TRACE:45: dev_barrier 
+TRACE:46: GET32(0x20215064) = 0x515f007c
+TRACE:47: dev_barrier 
+TRACE:48: dev_barrier 
+TRACE:49: GET32(0x20215064) = 0x515f007c
+TRACE:50: dev_barrier 
+TRACE:51: dev_barrier 
+TRACE:52: GET32(0x20215064) = 0x515f007c
+TRACE:53: dev_barrier 
+TRACE:54: dev_barrier 
+TRACE:55: GET32(0x20215064) = 0x515f007c
+TRACE:56: dev_barrier 
+TRACE:57: dev_barrier 
+TRACE:58: GET32(0x20215064) = 0x515f007c
+TRACE:59: dev_barrier 
+TRACE:60: dev_barrier 
+TRACE:61: GET32(0x20215064) = 0x515f007c
+TRACE:62: dev_barrier 
+TRACE:63: dev_barrier 
+TRACE:64: GET32(0x20215064) = 0x515f007c
+TRACE:65: dev_barrier 
+TRACE:66: dev_barrier 
+TRACE:67: GET32(0x20215064) = 0x515f007c
+TRACE:68: dev_barrier 
+TRACE:69: dev_barrier 
+TRACE:70: GET32(0x20215064) = 0x515f007c
+TRACE:71: dev_barrier 
+TRACE:72: dev_barrier 
+TRACE:73: GET32(0x20215064) = 0x515f007c
+TRACE:74: dev_barrier 
+TRACE:75: dev_barrier 
+TRACE:76: GET32(0x20215064) = 0x515f007c
+TRACE:77: dev_barrier 
+TRACE:78: dev_barrier 
+TRACE:79: GET32(0x20215064) = 0x515f007c
+TRACE:80: dev_barrier 
+TRACE:81: dev_barrier 
+TRACE:82: GET32(0x20215064) = 0x515f007c
+TRACE:83: dev_barrier 
+TRACE:84: dev_barrier 
+TRACE:85: GET32(0x20215064) = 0x515f007c
+TRACE:86: dev_barrier 
+TRACE:87: dev_barrier 
+TRACE:88: GET32(0x20215064) = 0x515f007c
+TRACE:89: dev_barrier 
+TRACE:90: dev_barrier 
+TRACE:91: GET32(0x20215064) = 0x515f007c
+TRACE:92: dev_barrier 
+TRACE:93: dev_barrier 
+TRACE:94: GET32(0x20215064) = 0x515f007c
+TRACE:95: dev_barrier 
+TRACE:96: dev_barrier 
+TRACE:97: GET32(0x20215064) = 0x515f007c
+TRACE:98: dev_barrier 
+TRACE:99: dev_barrier 
+TRACE:100: GET32(0x20215064) = 0x515f007c
+TRACE:101: dev_barrier 
+TRACE:102: dev_barrier 
+TRACE:103: GET32(0x20215064) = 0x515f007c
+TRACE:104: dev_barrier 
+TRACE:105: dev_barrier 
+TRACE:106: GET32(0x20215064) = 0x515f007c
+TRACE:107: dev_barrier 
+TRACE:108: dev_barrier 
+TRACE:109: GET32(0x20215064) = 0x515f007c
+TRACE:110: dev_barrier 
+TRACE:111: dev_barrier 
+TRACE:112: GET32(0x20215064) = 0x515f007c
+TRACE:113: dev_barrier 
+TRACE:114: dev_barrier 
+TRACE:115: GET32(0x20215064) = 0x515f007c
+TRACE:116: dev_barrier 
+TRACE:117: dev_barrier 
+TRACE:118: GET32(0x20215064) = 0x515f007c
+TRACE:119: dev_barrier 
+TRACE:120: dev_barrier 
+TRACE:121: GET32(0x20215064) = 0x515f007c
+TRACE:122: dev_barrier 
+TRACE:123: dev_barrier 
+TRACE:124: GET32(0x20215064) = 0x515f007c
+TRACE:125: dev_barrier 
+TRACE:126: dev_barrier 
+TRACE:127: GET32(0x20215064) = 0x515f007c
+TRACE:128: dev_barrier 
+TRACE: exiting after 129 trace statements
+TRACE: pi exited cleanly: 20 calls to random

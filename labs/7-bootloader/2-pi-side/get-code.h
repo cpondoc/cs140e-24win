@@ -245,7 +245,7 @@ uint32_t get_code(void) {
     // boot_todo("verify the checksum of copied code");
 
     // 7. send back a BOOT_SUCCESS!
-    boot_putk("Chris Pondoc: success: Received the program!");
+    boot_putk("UART Chris Pondoc: success: Received the program!");
     //boot_todo("fill in your name above");
 
     // woo!

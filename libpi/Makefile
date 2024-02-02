@@ -6,6 +6,7 @@
 #   2. swap the two lines below.
 # STAFF_OBJS  +=  ./staff-objs/gpio.o
 SRC += src/gpio.c
+SRC += src/uart.c
 
 # you would add the path to yours.
 STAFF_OBJS  +=  ./staff-objs/uart.o

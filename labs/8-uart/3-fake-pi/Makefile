@@ -13,7 +13,7 @@ LIB_SRC  += $(LPP)/libc/putchar.c
 LIB_SRC  += $(LPP)/staff-src/clean-reboot.c
 
 # 3. pull in your gpio.c
-# LIB_SRC  += gpio.c 
+# IB_SRC  += gpio.c 
 ifdef CS140E_STAFF
 LIB_SRC  += $(LPP)/staff-private/gpio.c 
 LIB_SRC  += $(LPP)/staff-private/uart.c 

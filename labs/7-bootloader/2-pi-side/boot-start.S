@@ -47,6 +47,7 @@ BRANCHTO:
     bx r0
 
 
+#if 0
 .globl put8
 .globl PUT8
 put8:
@@ -54,3 +55,4 @@ PUT8:
     strb r1,[r0]
     bx lr
 
+#endif

@@ -1,6 +1,6 @@
 # to use your gpio-int.c swap these.
-# COMMON_SRC := ../2-gpio-int/gpio-int.c
-STAFF_OBJS += $(CS140E_2024_PATH)/libpi/staff-objs/gpio-int.o
+COMMON_SRC := $(CS140E_2024_PATH)/libpi/src/gpio-int.c
+# STAFF_OBJS += $(CS140E_2024_PATH)/libpi/staff-objs/gpio-int.o
 
 #STAFF_OBJS += $(CS140E_2024_PATH)/libpi/staff-objs/interrupts-asm.o
 #STAFF_OBJS += $(CS140E_2024_PATH)/libpi/staff-objs/interrupts-vec-asm.o

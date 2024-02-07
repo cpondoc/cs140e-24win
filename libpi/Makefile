@@ -7,6 +7,7 @@
 # STAFF_OBJS  +=  ./staff-objs/gpio.o
 SRC += src/gpio.c
 SRC += src/uart.c
+src += src/vector-base.h
 
 # you would add the path to yours.
 STAFF_OBJS  +=  ./staff-objs/uart.o

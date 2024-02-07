@@ -14,6 +14,7 @@ static cq_t uartQ;
 
 enum { out_pin = 21, in_pin = 20 };
 static volatile unsigned n_rising_edge, n_falling_edge;
+static unsigned global_counter = 0;
 
 
 // client has to define this.
@@ -26,10 +27,25 @@ void interrupt_vector(unsigned pc) {
     //  - make sure you clear the GPIO event!
     //  - using the circular buffer is pretty slow. should tune this.
     //    easy way is to use a uint32_t array where the counter is volatile.
+    
+    // Calculate the number of cycles
     unsigned s = cycle_cnt_read();
+    unsigned num_cycles = s - global_counter;
+    global_counter = s;
+    cq_push32(&uartQ, num_cycles);
 
+    // Check for interrupts
     dev_barrier();
-    unimplemented();
+    if (gpio_read(in_pin) == 0) {
+        cq_push32(&uartQ, 1);
+        n_falling_edge += 1;
+    } else {
+        cq_push32(&uartQ, 0);
+        n_rising_edge += 1;
+    }
+
+    // Clearing the GPIO event
+    gpio_event_clear(in_pin);
     dev_barrier();
 }
 

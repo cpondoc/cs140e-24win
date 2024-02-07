@@ -52,7 +52,22 @@ volatile int n_falling;
 
 // check if there is an event, check if it was a falling edge.
 int falling_handler(uint32_t pc) {
-    todo("implement this: return 0 if no rising int\n");
+    //panic("%d", pc);
+    dev_barrier();
+
+    // Check if an event detected
+    if (!gpio_event_detected(in_pin)) {
+        return 0;
+    }
+    
+    // Check if it was a falling edge
+    if (gpio_read(in_pin) == 0) {
+        gpio_event_clear(in_pin);
+        n_falling++;
+        return 1;
+    }
+
+    dev_barrier();
     return 0;
 }
 
@@ -69,7 +84,19 @@ volatile int n_rising;
 
 // check if there is an event, check if it was a rising edge.
 int rising_handler(uint32_t pc) {
-    todo("implement this: return 0 if no rising int\n");
+    // Check if an event detected
+    if (!gpio_event_detected(in_pin)) {
+        return 0;
+    }
+    
+    // Check if it was a falling edge
+    if (gpio_read(in_pin) == 1) {
+        gpio_event_clear(in_pin);
+        n_rising++;
+        return 1;
+    }
+
+    dev_barrier();
     return 0;
 }
 
@@ -91,6 +118,16 @@ void timer_test_init(void) {
 
 int timer_test_handler(uint32_t pc) {
     dev_barrier();
-    todo("implement this by stealing pieces from 5-interrupts/0-timer-int");
+    // Make sure it's not something from the GPU
+    unsigned pending = GET32(IRQ_basic_pending);
+
+    // if this isn't true, could be a GPU interrupt (as discussed in Broadcom):
+    // just return.  [confusing, since we didn't enable!]
+    if((pending & RPI_BASIC_ARM_TIMER_IRQ) == 0)
+        return 0;
+
+    // Clear ARM timer interrupt
+    PUT32(arm_timer_IRQClear, 1);
     dev_barrier();
+    return 1;
 }

@@ -1,0 +1,5 @@
+opened tty port </dev/cu.usbserial-1240>.
+pi-install: tty-usb=</dev/cu.usbserial-1240> program=<./1-rising-edge.bin> about to boot
+TRACE:simple_boot: sending 7804 bytes, crc32=88036ea2
+waiting for a start
+putting code

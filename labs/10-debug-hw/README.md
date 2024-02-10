@@ -258,6 +258,159 @@ How to get the instruction fault status register (IFSR):
 </td></tr></table>
 
 -----------------------------------------------------------------------------
-### Part 3: port your code to a simple interface
+### Part 3: port your watchpoint code to a simple interface
 
-***IF YOU SEE THIS, do a git pull ***
+So far we've done very low level hacking to get things working --- this is
+great for a time-limited situation, since there aren't much moving pieces.
+It's not so great if you want to use the stuff later.
+
+The final part of the lab is trivially wrapping your code up in a
+simple-minded interface that (1) slightly abstracts the interface and
+(2) handles determining exception type and just calling the required
+client handler.
+
+Here you'll wrap up your watchpoint code in a simple system that manages 
+a single watchpoint:
+  1. The interface is in the header file `mini-watch.h` which gives 
+     the prototypes and the types.
+  2. The implementation is in the file `mini-watch.c` --- you should be
+     able to steal most of the code in `1-watchpt-test.c` for the
+     different routines.
+
+Two tests:
+  - `5-mini-watch-test.c` just re-does `1-watchpt-test.c` in the new interface.
+  - `6-mini-watch-byte-access.c` - checks that you fault on byte addresses.
+
+-----------------------------------------------------------------------------
+### Part 4: port your breakpoint code to a simple single-step
+
+NOTE you need to make three changes to compile:
+
+1. Add 
+
+        COMMON_SRC += mini-watch.c
+        COMMON_SRC += mini-step.c
+
+   To your makefile.
+
+2. Also change `mini-step.c:uart_can_putc` to `uart_can_put8`.
+3. If you get a `kmalloc` linking error you'll have to add 
+   it to `libpi/Makefile`:
+
+        STAFF_OBJS  +=  ./staff-objs/kmalloc.o
+
+
+Interface is in `mini-step.h`.  Your code should go in `mini-step.c`.
+You call it with a routine and it will run it in single-step mode.
+There are two tests :
+  - `7-mini-step-trace-only.c`: traces the pc values that run.
+  - `7-mini-step-diff.c`: prints the registers that changed when
+    running (you can use this to infer instruction semantics).
+
+So for the example code:
+
+```
+00008044 <nop_10>:
+    8044:   e320f000    nop {0}
+    8048:   e320f000    nop {0}
+    804c:   e320f000    nop {0}
+    8050:   e320f000    nop {0}
+    8054:   e320f000    nop {0}
+    8058:   e320f000    nop {0}
+    805c:   e320f000    nop {0}
+    8060:   e320f000    nop {0}
+    8064:   e320f000    nop {0}
+    8068:   e320f000    nop {0}
+    806c:   e12fff1e    bx  lr
+```
+
+`7-mini-step-diff.c` will result in:
+
+```
+TRACE:notmain:about to run nop10()!
+TRACE: cnt=0: pc=0x8044:  {first instruction}
+TRACE: cnt=1: pc=0x8048:  {no changes}
+TRACE: cnt=2: pc=0x804c:  {no changes}
+TRACE: cnt=3: pc=0x8050:  {no changes}
+TRACE: cnt=4: pc=0x8054:  {no changes}
+TRACE: cnt=5: pc=0x8058:  {no changes}
+TRACE: cnt=6: pc=0x805c:  {no changes}
+TRACE: cnt=7: pc=0x8060:  {no changes}
+TRACE: cnt=8: pc=0x8064:  {no changes}
+TRACE: cnt=9: pc=0x8068:  {no changes}
+TRACE: cnt=10: pc=0x806c:  {no changes}
+TRACE:notmain:done nop10()!
+```
+
+-----------------------------------------------------------------------------
+### Extension: make an always-on assertion system
+
+Assertions are great, but they  have the downside that they are only
+checked when you call them.  If there is only one mutation location,
+this can be easy: just put the assertion there.  Unfortunately if there
+are many such sites or there is corruption,  by the time you check,
+too much time has passed and you can't figure out what happened.
+
+You can use watchpoints and breakpoints to make "always on" assertions.
+  1. Set a store watchpoint on a memory location.
+  2. Each store to this location will cause a fault.
+  3. Disable the watchpoint.
+  4. Run an assert check.
+  5. If it fails, give an error.
+
+How to continue?
+  1. Set a breakpoint on the next instruction.
+  2. Jump back and let the mutation occur.
+  3. When you get the breakpoint exception, re-enable the watchpoint and
+     disable the breakpoint.
+
+-----------------------------------------------------------------------------
+### Extension: handle multiple watch and breakpoints.
+
+In general, as a safety measure, we should probably always enable
+watchpoint and breakpoints on `NULL`.   However, we'd also like to be
+able to catch breakpoints on other addresses.
+
+Extend your code to add support for a second simultaneous watchpoint and
+breakpoint to a different address.  In the handler differentiate it if
+it is a null pointer or a from the second value.
+
+For this:
+  1. Set a breakpoint on `foo` and see that you catch it.
+  2. Set a watchpoint on a value and see that you catch it.
+
+
+-----------------------------------------------------------------------------
+### Extension: a more general breakpoint setup.
+
+We hard-coded the breakpoint numbers and watchpoints to keep things simple.
+You'd probably want a less architecture-specific method.  One approach
+is to allocate breakpoints/watchpoints until there are no more available.
+
+    // returns 1 if there were free breakpoints and it could set.
+    // 0 otherwise.
+    int bkpt_set(uint32_t addr);
+    // delete <addr>: error if wasn't already set.
+    void bkpt_delete(uint32_t addr);
+
+    // same: for watchpoints.
+    int watchpt_set(uint32_t addr);
+    int watchpt_delete(uint32_t addr);
+
+
+Note: you may want to design your own interface. The above is likely
+not the best one possible.
+
+-----------------------------------------------------------------------------
+### Extension:  Failure-oblivious computing.
+
+Possibly the most-unsound paper in all of systems research is Rinard
+et al's "Failure-oblivious computing", which made buggy server programs
+"work" by handling memory corruption as follows:
+   1. Discard out of bound writes.
+   2. Return a random value for out of bound reads (starting at 0, 1, 2, ...).
+
+We can only handle a single address, but we can do a similar thing.   Change
+your exception code to take the complete set of registers, and restore from
+this set (so that you can change it).
+

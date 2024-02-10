@@ -75,7 +75,6 @@ void notmain(void) {
     full_except_install(0);
     full_except_set_data_abort(watchpt_fault);
 
-    todo("enable the debug coprocessor.");
     cp14_enable();
 
     /* 
@@ -92,7 +91,8 @@ void notmain(void) {
 
     // set watchpoint.
     assert(!cp14_wcr0_is_enabled());
-    uint32_t b = 0;
+    //uint32_t b = 0;
+    uint32_t b = 0b000000000000011111111;
     if(!b)
         panic("set b to the right bits for wcr0\n");
 

@@ -89,7 +89,8 @@ void notmain(void) {
     assert(!cp14_bcr0_is_enabled());
 
     // see 13-17 for how to set bits
-    uint32_t b = 0;
+    //uint32_t b = 0;
+    uint32_t b = 0b000000000000011111111;
 
     if(!b)
         panic("must set b to the right bits\n");

@@ -113,17 +113,28 @@ static inline uint32_t cp14_dscr_get(void);
 
 // example of how to define get and set for status registers
 coproc_mk(status, p14, 0, c0, c1, 0)
+coproc_mk(dfsr, p15, 0, c5, c0, 0) // CP15 DFSR
+coproc_mk(ifar, p15, 0, c6, c0, 2) // CP15 IFAR
+coproc_mk(ifsr, p15, 0, c5, c0, 1) // CP15 IFSR
+coproc_mk(dscr, p14, 0, c0, c1, 0) // CP14 DSCR
+coproc_mk(wcr0, p14, 0, c0, c0, 7) // CP14 WCR0
+coproc_mk(wfar, p14, 0, c0, c6, 0) // CP14 WFAR
 
 // you'll need to define these and a bunch of other routines.
-static inline uint32_t cp15_dfsr_get(void) { todo("implement"); }
-static inline uint32_t cp15_ifar_get(void) { todo("implement"); }
-static inline uint32_t cp15_ifsr_get(void) { todo("implement"); }
-static inline uint32_t cp14_dscr_get(void) { todo("implement"); }
-static inline uint32_t cp14_wcr0_set(uint32_t r) { todo("implement"); }
+// static inline uint32_t cp15_dfsr_get(void) { todo("implement"); }
+// static inline uint32_t cp15_ifar_get(void) { todo("implement"); }
+// static inline uint32_t cp15_ifsr_get(void) { todo("implement"); }
+// static inline uint32_t cp14_dscr_get(void) { todo("implement"); }
+// static inline uint32_t cp14_wcr0_set(uint32_t r) { todo("implement"); }
 
-static inline void cp14_wvr0_set(uint32_t r) { todo("implement"); }
-static inline void cp14_bcr0_set(uint32_t r) { todo("implement"); }
-static inline void cp14_bvr0_set(uint32_t r) { todo("implement"); }
+// Define more registers
+coproc_mk(wvr0, p14, 0, c0, c0, 6) // CP14 WVR0
+coproc_mk(bcr0, p14, 0, c0, c0, 5) // CP14 BCR0
+coproc_mk(bvr0, p14, 0, c0, c0, 4) // CP14 BVR0
+
+// static inline void cp14_wvr0_set(uint32_t r) { todo("implement"); }
+// static inline void cp14_bcr0_set(uint32_t r) { todo("implement"); }
+// static inline void cp14_bvr0_set(uint32_t r) { todo("implement"); }
 
 
 // return 1 if enabled, 0 otherwise.  
@@ -131,7 +142,10 @@ static inline void cp14_bvr0_set(uint32_t r) { todo("implement"); }
 //      could return its value instead of 1 (since is 
 //      non-zero).
 static inline int cp14_is_enabled(void) {
-    unimplemented();
+    dev_barrier();
+    int ret = bit_is_on(cp14_status_get(), 15);
+    dev_barrier();
+    return ret;
 }
 
 // enable debug coprocessor 
@@ -142,7 +156,12 @@ static inline void cp14_enable(void) {
 
     // for the core to take a debug exception, monitor debug mode has to be both 
     // selected and enabled --- bit 14 clear and bit 15 set.
-    unimplemented();
+    dev_barrier();
+    uint32_t value = cp14_dscr_get();
+    value = bit_set(value, 15);
+    value = bit_clr(value, 14);
+    cp14_dscr_set(value);
+    dev_barrier();
 
     assert(cp14_is_enabled());
 }
@@ -152,34 +171,61 @@ static inline void cp14_disable(void) {
     if(!cp14_is_enabled())
         return;
 
-    unimplemented();
+    // Just clear that 15th bit
+    dev_barrier();
+    uint32_t value = cp14_dscr_get();
+    value = bit_clr(value, 15);
+    cp14_dscr_set(value);
+    dev_barrier();
 
     assert(!cp14_is_enabled());
 }
 
-
+// Check 0th bit of bcr0
 static inline int cp14_bcr0_is_enabled(void) {
-    unimplemented();
+    dev_barrier();
+    int ret = bit_isset(cp14_bcr0_get(), 0);
+    dev_barrier();
+    return ret;
 }
+
+// Set 0th bit of bcr0
 static inline void cp14_bcr0_enable(void) {
-    unimplemented();
+    dev_barrier();
+    uint32_t val = cp14_bcr0_get();
+    val = bit_set(val, 0);
+    cp14_bcr0_set(val);
+    dev_barrier();
 }
+
+// Clear 0th bit of bcr0
 static inline void cp14_bcr0_disable(void) {
-    unimplemented();
+    dev_barrier();
+    uint32_t val = cp14_bcr0_get();
+    val = bit_clr(val, 0);
+    cp14_bcr0_set(val);
+    dev_barrier();
 }
 
 // was this a brkpt fault?
 static inline int was_brkpt_fault(void) {
-    // use IFSR and then DSCR
-    unimplemented();
+    // Use IFSR
+    dev_barrier();
+    if (~bits_get(cp15_ifsr_get(), 0, 3) == 2) {
+        panic("Not a debug exception!");
+    }
 
-    return 0;
+    // Use DSCR
+    int ret = (bits_get(cp14_dscr_get(), 2, 5) == 1);
+    dev_barrier();
+    return ret;
 }
 
 // was watchpoint debug fault caused by a load?
 static inline int datafault_from_ld(void) {
     return bit_isset(cp15_dfsr_get(), 11) == 0;
 }
+
 // ...  by a store?
 static inline int datafault_from_st(void) {
     return !datafault_from_ld();
@@ -188,23 +234,48 @@ static inline int datafault_from_st(void) {
 
 // 13-33: tabl 13-23
 static inline int was_watchpt_fault(void) {
-    // use DFSR then DSCR
-    unimplemented();
+    // Use DFSR
+    dev_barrier();
+    if (~bits_get(cp15_dfsr_get(), 0, 3) == 2) {
+        panic("Not a debug exception!");
+    }
+
+    // Use DSCR
+    int ret = (bits_get(cp14_dscr_get(), 2, 5) == 2);
+    dev_barrier();
+    return ret;
 }
 
 static inline int cp14_wcr0_is_enabled(void) {
-    unimplemented();
+    dev_barrier();
+    int ret = bit_isset(cp14_wcr0_get(), 0);
+    dev_barrier();
+    return ret;
 }
+
 static inline void cp14_wcr0_enable(void) {
-    unimplemented();
+    dev_barrier();
+    uint32_t val = cp14_wcr0_get();
+    val = bit_set(val, 0);
+    cp14_wcr0_set(val);
+    dev_barrier();
 }
+
 static inline void cp14_wcr0_disable(void) {
-    unimplemented();
+    dev_barrier();
+    uint32_t val = cp14_wcr0_get();
+    val = bit_clr(val, 0);
+    cp14_wcr0_set(val);
+    dev_barrier();
 }
 
 // Get watchpoint fault using WFAR
 static inline uint32_t watchpt_fault_pc(void) {
-    unimplemented();
+    // Check for watchpoint
+    dev_barrier();
+    uint32_t ret = cp14_wfar_get() - 0x8;
+    dev_barrier();
+    return ret;
 }
     
 #endif

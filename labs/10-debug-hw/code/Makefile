@@ -1,6 +1,7 @@
 # you'll implement <mini-watch.c> later in lab
 COMMON_SRC += mini-watch.c
 COMMON_SRC += staff-full-except.c 
+COMMON_SRC += mini-step.c
 
 # you'll do these next week.
 STAFF_OBJS := staff-full-except-asm.o  staff-switchto-asm.o
@@ -16,9 +17,12 @@ START_ASM = staff-start.S
 
 # simple watchpoint test
 # PROGS := 1-watchpt-test.c  2-brkpt-test.c  
-PROGS := 5-mini-watch-test.c 6-mini-watch-byte-access.c
+# PROGS := 5-mini-watch-test.c 6-mini-watch-byte-access.c
 
+# More comprehensive tests
+PROGS := 7-mini-step-trace-only.c
 # PROGS := $(wildcard ./[123456]-*.c)
+# PROGS := $(wildcard ./[7]-*.c)
 
 GREP_STR := 'TRACE:\|THREAD:\|ERROR:\|PANIC:' 
 include $(CS140E_2024_PATH)/libpi/mk/Makefile.template-fixed

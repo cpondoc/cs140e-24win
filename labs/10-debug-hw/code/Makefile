@@ -20,8 +20,8 @@ START_ASM = staff-start.S
 # PROGS := 5-mini-watch-test.c 6-mini-watch-byte-access.c
 
 # More comprehensive tests
-PROGS := 7-mini-step-trace-only.c
-# PROGS := $(wildcard ./[123456]-*.c)
+# PROGS := 7-mini-step-trace-only.c
+PROGS := $(wildcard ./[1234567]-*.c)
 # PROGS := $(wildcard ./[7]-*.c)
 
 GREP_STR := 'TRACE:\|THREAD:\|ERROR:\|PANIC:' 

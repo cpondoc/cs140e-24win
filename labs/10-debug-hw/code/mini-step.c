@@ -29,8 +29,10 @@ static inline uint32_t mismatch_pc_set(uint32_t pc) {
     // set a mismatch (vs match) using bvr0 and bcr0 on
     // <pc>
     cp14_bvr0_set(pc);
-    uint32_t b = 0b000000000000111100111;
+    uint32_t b = 0b000000000000111111111;
     b = bit_set(b, 22);
+    b = bit_clr(b, 21);
+    b = bit_clr(b, 20);
     cp14_bcr0_set(b);
 
     assert( cp14_bvr0_get() == pc);
@@ -90,8 +92,7 @@ static void mismatch_fault(regs_t *r) {
     }
 
     // Set up fault handler
-    step_fault_t f = {};
-    f = step_fault_mk(pc, r);
+    step_fault_t f = step_fault_mk(pc, r);
     step_handler(step_handler_data, &f);
 
     // Set up a mismatch on pc
@@ -117,7 +118,7 @@ void mini_step_init(step_handler_t h, void *data) {
 
     // Set up exception handlers
     full_except_install(0);
-    full_except_set_data_abort(mismatch_fault);
+    full_except_set_prefetch(mismatch_fault);
 
     // Enable cp14
     cp14_enable();

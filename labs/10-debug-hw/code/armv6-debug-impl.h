@@ -149,6 +149,7 @@ static inline int cp14_is_enabled(void) {
 }
 
 // enable debug coprocessor 
+// Page 13-7
 static inline void cp14_enable(void) {
     // if it's already enabled, just return?
     if(cp14_is_enabled())
@@ -167,6 +168,7 @@ static inline void cp14_enable(void) {
 }
 
 // disable debug coprocessor
+// Page 13-7
 static inline void cp14_disable(void) {
     if(!cp14_is_enabled())
         return;
@@ -182,6 +184,7 @@ static inline void cp14_disable(void) {
 }
 
 // Check 0th bit of bcr0
+// Pages 13-13-17
 static inline int cp14_bcr0_is_enabled(void) {
     dev_barrier();
     int ret = bit_isset(cp14_bcr0_get(), 0);
@@ -190,6 +193,7 @@ static inline int cp14_bcr0_is_enabled(void) {
 }
 
 // Set 0th bit of bcr0
+// Pages 13-13-17
 static inline void cp14_bcr0_enable(void) {
     dev_barrier();
     uint32_t val = cp14_bcr0_get();
@@ -199,6 +203,7 @@ static inline void cp14_bcr0_enable(void) {
 }
 
 // Clear 0th bit of bcr0
+// Pages 13-13-17
 static inline void cp14_bcr0_disable(void) {
     dev_barrier();
     uint32_t val = cp14_bcr0_get();
@@ -208,6 +213,7 @@ static inline void cp14_bcr0_disable(void) {
 }
 
 // was this a brkpt fault?
+// Page 13-7
 static inline int was_brkpt_fault(void) {
     // Use IFSR
     dev_barrier();
@@ -222,15 +228,16 @@ static inline int was_brkpt_fault(void) {
 }
 
 // was watchpoint debug fault caused by a load?
+// Page 13-34
 static inline int datafault_from_ld(void) {
     return bit_isset(cp15_dfsr_get(), 11) == 0;
 }
 
 // ...  by a store?
+// Table 13-34
 static inline int datafault_from_st(void) {
     return !datafault_from_ld();
 }
-
 
 // 13-33: tabl 13-23
 static inline int was_watchpt_fault(void) {
@@ -246,6 +253,7 @@ static inline int was_watchpt_fault(void) {
     return ret;
 }
 
+// Starts page 13-22
 static inline int cp14_wcr0_is_enabled(void) {
     dev_barrier();
     int ret = bit_isset(cp14_wcr0_get(), 0);
@@ -253,6 +261,7 @@ static inline int cp14_wcr0_is_enabled(void) {
     return ret;
 }
 
+// Starts page 13-22
 static inline void cp14_wcr0_enable(void) {
     dev_barrier();
     uint32_t val = cp14_wcr0_get();
@@ -261,6 +270,7 @@ static inline void cp14_wcr0_enable(void) {
     dev_barrier();
 }
 
+// Starts page 13-22
 static inline void cp14_wcr0_disable(void) {
     dev_barrier();
     uint32_t val = cp14_wcr0_get();
@@ -270,6 +280,7 @@ static inline void cp14_wcr0_disable(void) {
 }
 
 // Get watchpoint fault using WFAR
+// Page 13-12
 static inline uint32_t watchpt_fault_pc(void) {
     // Check for watchpoint
     dev_barrier();

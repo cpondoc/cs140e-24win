@@ -2,8 +2,8 @@ PROGS = driver-accel.c
 # PROGS = driver-gyro.c
 
 # when you build yours swap this.
-# COMMON_SRC = mpu-6050.c
-STAFF_OBJS += staff-mpu-6050.o
+COMMON_SRC = mpu-6050.c
+# STAFF_OBJS += staff-mpu-6050.o
 
 # if you make your own i2c, get rid of this.
 # default: is too slow.

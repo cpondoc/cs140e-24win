@@ -122,8 +122,8 @@ imu_xyz_t accel_scale(accel_t *h, imu_xyz_t xyz) {
 // pull the reading into a circular buffer
 // (similar to device lab).
 int accel_has_data(const accel_t *h) {
-    todo("check that have data");
-    return 1;
+    uint8_t res = imu_rd(h->addr, INT_STATUS);
+    return res & 0b1;
 }
 
 
@@ -133,7 +133,8 @@ int accel_has_data(const accel_t *h) {
 // i'd suggest playing w/ gdb or small C programs to see that what
 // C does matches your intuition.
 static short mg_raw(uint8_t lo, uint8_t hi) {
-    todo("combine both bytes (make sure sign extended)");
+    short res = (hi << 8) + (lo);
+    return res;
 }
 
 // sanity testing code.
@@ -170,7 +171,8 @@ accel_t mpu6050_accel_init(uint8_t addr, unsigned accel_g) {
     test_mg(-1000, 0xbf, 0xf7, 2);
 
     // initialized your accel to 2g (accel_confi_reg)
-    todo("setup accel with 2g");
+    // Updated: should page 15
+    imu_wr(addr, accel_config_reg, 0b00000000);
 
     output("accel_config_reg=%b\n", imu_rd(addr, accel_config_reg));
     return (accel_t) { .addr = addr, .g = g, .hz = 20 };
@@ -187,7 +189,7 @@ void mpu6050_reset(uint8_t addr) {
 
     // page 41: to reset device: set bit 7 = 1 in register
     // PWR_MGMT_1 (register 0x6b)
-    todo("reset device");
+    imu_wr(addr, PWR_MGMT_1, 0b10000000);
 
     // XXX: we should read different registers and see that they
     // went back to startup.
@@ -202,25 +204,25 @@ void mpu6050_reset(uint8_t addr) {
     // if you do *NOT* do this, then the device we have does not work.
     // according to my reading of the data sheet, the value of 0x6b should
     // be 0 after reset.  so i don't get this.
-    todo("clear sleep mode");
+    imu_wr(addr, PWR_MGMT_1, 0b00000000);
 
     delay_ms(100);
 
     // page 39: USER_CTRL (register 0x6a): reset:
-    //   - the signal path 
-    //   - i2c master mode 
-    //   - fifo
+    //   - the signal path -- SIG_COND_RESET
+    //   - i2c master mode -- I2C_MST_RESET
+    //   - fifo -- FIFO_RESET
     // not sure if redundant after device reset --- datasheet
     // unclear --- so we do to be sure.
-    todo("reset all these");
+    imu_wr(addr, USER_CTRL, 0b00000111);
 
     delay_ms(100);
 
     // NOTE: enable interrupts only on the IMU, not on your pi.
     // (INT_ENABLE) after you config (p27):
-    // - latch to be held high until cleared;
-    // - read to clear it.
-    todo("enable IMU interrupts so you can tell that data is ready");
+    // - latch to be held high until cleared; -- LATCH_INT_EN
+    // - read to clear it. -- INT_RD_CLEAR
+    imu_wr(addr, 0x37, 0b00110000);
 }
 
 // block until there is data and then return it (raw)
@@ -260,8 +262,11 @@ imu_xyz_t accel_rd(const accel_t *h) {
     //  - if this doesn't work, read regs one at a time.
     //  - you'll have to comine the two 8-bit unsigned
     //    regs into a signed 16 bit number using <mg_raw>
-    todo("implement burst reads and return as unscaled x,y,z");
-    
+    imu_rd_n(addr, ACCEL_XOUT_H, regs, 6);
+    x = mg_raw(regs[1], regs[0]);
+    y = mg_raw(regs[3], regs[2]);
+    z = mg_raw(regs[5], regs[4]);
+
     return xyz_mk(x,y,z);
 }
 
@@ -274,9 +279,9 @@ imu_xyz_t accel_rd(const accel_t *h) {
 // gyro registers.
 enum {
     // p13, p6
-    CONFIG = 28, 
+    CONFIG = 0x1A, 
     // p14, p6
-    GYRO_CONFIG = 29, 
+    GYRO_CONFIG = 0x1B, 
 
     // p6, p14
     gyro_config_reg = 0x1b,
@@ -363,22 +368,26 @@ gyro_t mpu6050_gyro_init(uint8_t addr, unsigned gyro_dps) {
     }
 
     // you'll need to set CONFIG (p13) and GYRO_CONFIG (p14)
-    todo("initialize the gyro");
+    // Set config based on 20 Hz bandwidth
+
+    imu_wr(addr, CONFIG, 0b000);
+    imu_wr(addr, GYRO_CONFIG, 0b01 << 3);
     return (gyro_t) { .addr = addr, .dps = dps,  };
 }
 
 // use int or fifo to tell when data.
 int gyro_has_data(const gyro_t *h) {
-    todo("implement this");
-    return 1;
+    uint8_t res = imu_rd(h->addr, INT_STATUS);
+    return res & 0b1;
 }
 
 // return a single raw gyro reading.
-imu_xyz_t gyro_rd(const gyro_t *h) {
+imu_xyz_t gyro_rd(gyro_t *h) {
     // not sure if we have to drain the queue if there are more readings?
 
     unsigned dps_scale = h->dps;
     uint8_t addr = h->addr;
+    uint8_t regs[6];
 
     while(!gyro_has_data(h))
         ;
@@ -386,6 +395,9 @@ imu_xyz_t gyro_rd(const gyro_t *h) {
     int x=0,y=0,z=00;
 
     // you'll need to combine the 8-bit regs into a 16-bit using <mg_raw>
-    todo("implement this");
+    imu_rd_n(addr, GYRO_XOUT_H, regs, 6);
+    x = (mg_raw(regs[1], regs[0]));
+    y = (mg_raw(regs[3], regs[2]));
+    z = (mg_raw(regs[5], regs[4]));
     return xyz_mk(x,y,z);
 }

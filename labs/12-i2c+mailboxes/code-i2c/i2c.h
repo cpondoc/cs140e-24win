@@ -12,9 +12,11 @@ void i2c_init_clk_div(unsigned clk_div);
 void i2c_init_once(void);
 
 // write <nbytes> of <datea> to i2c device address <addr>
+int my_i2c_write(unsigned addr, uint8_t data[], unsigned nbytes);
 int i2c_write(unsigned addr, uint8_t data[], unsigned nbytes);
 // read <nbytes> of <datea> from i2c device address <addr>
 int i2c_read(unsigned addr, uint8_t data[], unsigned nbytes);
+int my_i2c_read(unsigned addr, uint8_t data[], unsigned nbytes);
 
 
 #endif

@@ -8,6 +8,7 @@
 SRC += src/gpio.c
 SRC += src/uart.c
 src += src/vector-base.h
+SRC += src/i2c.c
 
 # you would add the path to yours.
 STAFF_OBJS  +=  ./staff-objs/uart.o

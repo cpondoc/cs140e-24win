@@ -71,7 +71,7 @@ void notmain(void) {
     // from <1-srs-rfe.c>
     uint32_t regs[2];
     regs[0] = (uint32_t)mov_ident;   // in <start.S>
-    regs[1] = USER_MODE;
+    regs[1] = UNDEF_MODE;
     trace("about to jump to pc=[%x] with cpsr=%x\n",
             regs[0], regs[1]);
     rfe_asm(regs);

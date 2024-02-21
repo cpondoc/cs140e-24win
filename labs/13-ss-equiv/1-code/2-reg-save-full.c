@@ -24,10 +24,17 @@
 #include "cpsr-util.h"
 #include "vector-base.h"
 
+void mode_get_lr_sp_asm(uint32_t mode, uint32_t * sp, uint32_t * lr);
+
 int do_syscall(uint32_t regs[17]) {
+    // User Mode
+    if (regs[16] != USER_MODE) {
+        mode_get_lr_sp_asm(regs[16], &regs[13], &regs[14]);
+    }
+
     int sysno = regs[0];
     trace("in syscall: sysno=%d\n", sysno);
-
+    
     for(unsigned i = 0; i < 17; i++)
         if(regs[i])
             trace("reg[%d]=%x\n", i, regs[i]);
@@ -39,6 +46,7 @@ int do_syscall(uint32_t regs[17]) {
 
 void swi_fn(void);
 void switchto_user_asm(uint32_t regs[17]);
+void switchto_any_asm(uint32_t regs[17]);
 
 void nop_10(void);
 void mov_ident(void);
@@ -53,8 +61,8 @@ void notmain(void) {
     for(unsigned i = 0; i < 15; i++)
         regs[i] = i;
     regs[15] = (uint32_t)swi_fn;   // in <start.S>
-    regs[16] = USER_MODE;
+    regs[16] = UNDEF_MODE;
     trace("about to jump to pc=[%x] with cpsr=%x\n",
             regs[15], regs[16]);
-    switchto_user_asm(regs);
+    switchto_any_asm(regs);
 }

@@ -60,6 +60,27 @@ MK_FN(switchto_user_asm)
     rfe sp
     asm_not_reached();
 
+MK_FN(switchto_any_asm)
+    @ Set the stack pointer
+    mov sp, r0
+
+    @ Go to the other mode
+    ldr r1, [r0, #64]
+    msr cpsr, r1
+    prefetch_flush(lr)
+
+    @ Load the values
+    ldm r0, {r0-r14}
+
+    @ Go back into the old mode
+    cps #SUPER_MODE
+    prefetch_flush(lr)
+
+    @ Adjust stack pointer
+    add sp, sp, #60
+    rfe sp
+    asm_not_reached();
+
 @ so we don't get linker errors 
 .weak rfe_c_code
 rfe_c_code:

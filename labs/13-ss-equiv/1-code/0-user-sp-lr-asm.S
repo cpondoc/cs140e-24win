@@ -21,17 +21,41 @@ MK_FN(user_sp_get)
 
 @ set the USER sp
 MK_FN(user_sp_set)
-    asm_todo(implement this using a macro to wrap things up);
+    cps #SYS_MODE
+    prefetch_flush(r1);
+
+    @ USER And SYSTEM share the same sp/lr/cpsr
+    mov sp, r0
+
+    cps #SUPER_MODE
+    prefetch_flush(r1);
+
     bx lr
 
 @ get the USER lr 
 MK_FN(user_lr_get)
-    asm_todo(implement this using a macro to wrap things up);
+    cps #SYS_MODE
+    prefetch_flush(r1);
+
+    @ USER And SYSTEM share the same sp/lr/cpsr
+    mov r0, lr
+
+    cps #SUPER_MODE
+    prefetch_flush(r1);
+
     bx lr
 
 @ set USER lr 
 MK_FN(user_lr_set)
-    asm_todo(implement this using a macro to wrap things up);
+    cps #SYS_MODE
+    prefetch_flush(r1);
+
+    @ USER And SYSTEM share the same sp/lr/cpsr
+    mov lr, r0
+
+    cps #SUPER_MODE
+    prefetch_flush(r1);
+
     bx lr
 
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
@@ -45,29 +69,29 @@ MK_FN(mem_user_sp_get)
 
 @ address to a uint32_t word is passed in r0
 MK_FN(mem_user_sp_set)
-    asm_todo("implement this");
+    ldm r0, {sp}^
     bx lr
 
 @ address to a uint32_t word is passed in r0
 MK_FN(mem_user_lr_get)
-    asm_todo("implement this");
+    stm r0, {lr}^
     bx lr
 
 @ address to a uint32_t word is passed in r0
 MK_FN(mem_user_lr_set)
-    asm_todo("implement this");
+    ldm r0, {lr}^
     bx lr
 
 @ address to an array with two uint32_t words 
 @ is passed in r0
 MK_FN(mem_user_sp_lr_get)
-    asm_todo("implement this");
+    stm r0, {sp, lr}^
     bx lr
 
 @ address to an array with two uint32_t words 
 @ is passed in r0
 MK_FN(mem_user_sp_lr_set)
-    asm_todo("implement this");
+    ldm r0, {sp, lr}^
     bx lr
 
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
@@ -77,6 +101,15 @@ MK_FN(mem_user_sp_lr_set)
 
 @ void mode_get_lr_sp_asm(mode, &sp, &lr)
 MK_FN(mode_get_lr_sp_asm)
-    asm_todo("implement this");
+    msr cpsr_c, r0
+    prefetch_flush(r3);
+
+    @ USER And SYSTEM share the same sp/lr/cpsr
+    str sp, [r1]
+    str lr, [r2]
+
+    @ Can we just go back to supervisor mode?
+    cps #SUPER_MODE
+    prefetch_flush(r3);
     bx lr
 

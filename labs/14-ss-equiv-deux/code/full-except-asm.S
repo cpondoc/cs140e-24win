@@ -79,13 +79,29 @@ MK_TRAMPOLINE(interrupt,        4, int_vector)
 @    faulted.
 prefetch_handler_full:
     @ initially we just forward to staff
-    b staff_prefetch_trampoline_full
+    @ b staff_prefetch_trampoline_full
 
     mov sp, #INT_STACK_ADDR
     sub   lr, lr, #4
 
-    asm_todo("save all the regs in a reg_t on the stack") 
-    asm_todo("mov regs into r0, spsr into r1, pc into r2")
+    @ Get user mode registers
+    sub sp, sp, #68
+    stm sp, {r0 - r14}^
+    add sp, sp, #60
+
+    @ Get pc
+    str lr, [sp]
+    add sp, sp, #4
+
+    @ Push spsr
+    mrs r0, spsr
+    str r0, [sp]
+    sub sp, sp, #64
+
+    @ Mov elements into right places
+    mov r0, sp
+    mov r2, lr
+    mrs r1, spsr
 
     bl prefetch_abort_full_except
     asm_not_reached();
@@ -96,10 +112,30 @@ prefetch_handler_full:
 @  - the pc in <regs> should point to the instruction that
 @    faulted.
 data_abort_full:
-    @ initially we just forward to staff
-    b staff_data_abort_trampoline_full
+    @ Set stack and lr
+    mov sp, #INT_STACK_ADDR
+    sub lr, lr, #8
 
-    asm_todo("implement")
+    @ Get user mode registers
+    sub sp, sp, #68
+    stm sp, {r0 - r14}^
+    add sp, sp, #60
+
+    @ Get pc
+    str lr, [sp]
+    add sp, sp, #4
+
+    @ Push spsr
+    mrs r0, spsr
+    str r0, [sp]
+    sub sp, sp, #64
+
+    @ Mov elements into right places
+    mov r0, sp
+    mov r2, lr
+    mrs r1, spsr
+
+    @ Branch and link to the full except
     bl data_abort_full_except
     asm_not_reached();
 
@@ -111,9 +147,26 @@ data_abort_full:
 @ the pc in <regs> should point to the instruction after.
 syscall_full:
     @ initially we just forward to staff
-    b staff_syscall_trampoline_full
+    @ b staff_syscall_trampoline_full
 
-    asm_todo("implement: do not set sp!")
+    @ Get user mode registers
+    sub sp, sp, #68
+    stm sp, {r0 - r14}^
+    add sp, sp, #60
+
+    @ Get pc
+    str lr, [sp]
+    add sp, sp, #4
+
+    @ Push spsr
+    mrs r0, spsr
+    str r0, [sp]
+    sub sp, sp, #64
+
+    @ Mov elements into right places
+    mov r0, sp
+    mov r2, lr
+    mrs r1, spsr
 
     bl syscall_full_except
     asm_not_reached();

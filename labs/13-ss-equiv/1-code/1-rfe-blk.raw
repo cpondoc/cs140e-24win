@@ -1,0 +1,15 @@
+DEBUG:done with options: dev name=</dev/cu.usbserial-11330>, pi-prog=<./1-rfe-blk.bin>, trace=0
+Device: /dev/cu.usbserial-11330
+opened tty port </dev/cu.usbserial-11330>.
+DEBUG:my-install: tty-usb=</dev/cu.usbserial-11330> program=<./1-rfe-blk.bin>: about to boot
+TRACE:simple_boot: sending 7220 bytes, crc32=9a71a56e
+BOOT:waiting for a start
+DEBUG:PRINT_STRING:pi sent print: <UART Chris Pondoc: success: Received the program!>
+BOOT:bootloader: Done.
+TRACE:notmain:about to jump to pc=[0x8554] with cpsr=0x10
+TRACE:rfe_c_code:sp=[0x9000000], should equal INT_STACK_ADDR=0x9000000
+TRACE:rfe_c_code:cpsr=0x10, mode=USER MODE
+TRACE:rfe_c_code:SUCCESS: we are at user level!
+DONE!!!
+
+bootloader: pi exited.  cleaning up

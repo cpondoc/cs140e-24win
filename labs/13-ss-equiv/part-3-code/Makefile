@@ -12,7 +12,7 @@ BOOTLOADER=my-install
 # PROGS += 1-rfe-switchto-user.c
 
 # PROGS = 2-reg-save.c
-PROGS = 2-reg-save-full.c
+# PROGS = 2-reg-save-full.c
 
 START_ASM = staff-start.S
 # START_ASM = staff-start.S

@@ -15,6 +15,7 @@
         "libunix.h": "c",
         "gpio.h": "c",
         "full-except.h": "c",
-        "armv6-debug-impl.h": "c"
+        "armv6-debug-impl.h": "c",
+        "cpsr-util.h": "c"
     }
 }

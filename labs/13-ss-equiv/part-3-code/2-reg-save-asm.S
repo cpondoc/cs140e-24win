@@ -12,10 +12,8 @@ swi_trampoline:
     sub sp, sp, #68
 
     @ Get user mode registers
-    stm sp, {r0 - r12}
-    add sp, sp, #48
-
-    add sp, sp, #12
+    stm sp, {r0 - r14}^
+    add sp, sp, #60
 
     @ Get pc
     str lr, [sp]
@@ -23,19 +21,15 @@ swi_trampoline:
 
     @ Push spsr
     mrs r0, spsr
-    mov r1, r0
     str r0, [sp]
-    sub sp, sp, #16
-
-    @ msr to get the values
-    msr cpsr, r1
-    stm sp, {r13-r14}
-    sub sp, sp, #48
+    sub sp, sp, #64
 
     @ Mov stack pointer into r0 + move to function
     mov r0, sp
     bl do_syscall
+    @ asm_todo("implement this")
 
+    @ note: this trampoline does not resume.
     asm_not_reached();
 
 @ only handle single step.

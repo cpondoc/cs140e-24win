@@ -1,0 +1,32 @@
+DEBUG:done with options: dev name=</dev/cu.usbserial-11330>, pi-prog=<./0-user-sp-lr.bin>, trace=0
+Device: /dev/cu.usbserial-11330
+opened tty port </dev/cu.usbserial-11330>.
+DEBUG:my-install: tty-usb=</dev/cu.usbserial-11330> program=<./0-user-sp-lr.bin>: about to boot
+TRACE:simple_boot: sending 8508 bytes, crc32=aadbc1ee
+BOOT:waiting for a start
+DEBUG:PRINT_STRING:pi sent print: <UART Chris Pondoc: success: Received the program!>
+BOOT:bootloader: Done.
+uninitialized user sp=0xc3873350
+uninitialized user lr=0xa04dd857
+TRACE:notmain:-----------------------------------------------------------
+TRACE:notmain:part 1: get/set USER sp/lr by switching to SYSTEM and back
+TRACE:notmain:	got USER sp=0xfeedface
+TRACE:notmain:	got USER lr=0xdeadbeef
+TRACE:notmain:part 1: passed
+TRACE:notmain:-----------------------------------------------------------
+TRACE:notmain:part 2: set/get USER sp/lr using ldm/stm with ^
+TRACE:notmain:	got USER sp=0xfeedface
+TRACE:notmain:	got USER lr=0xdeadbeef
+TRACE:notmain:part 2 passed
+TRACE:notmain:-----------------------------------------------------------
+TRACE:notmain:part 3: set/get USER sp/lr using single ldm/stm ^ instruction
+TRACE:notmain:	got USER sp=0xfeedface
+TRACE:notmain:	got USER lr=0xdeadbeef
+TRACE:notmain:part 3: passed
+TRACE:notmain:-----------------------------------------------------------
+TRACE:notmain:part 4: now write and check mode_get_lr_sp_asm
+TRACE:notmain:sp=0xfeedface, lr=0xdeadbeef
+SUCCESS: all tests passed.
+DONE!!!
+
+bootloader: pi exited.  cleaning up

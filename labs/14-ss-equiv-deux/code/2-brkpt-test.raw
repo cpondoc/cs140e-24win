@@ -1,0 +1,90 @@
+DEBUG:done with options: dev name=</dev/cu.usbserial-1210>, pi-prog=<./2-brkpt-test.bin>, trace=0
+Device: /dev/cu.usbserial-1210
+opened tty port </dev/cu.usbserial-1210>.
+DEBUG:my-install: tty-usb=</dev/cu.usbserial-1210> program=<./2-brkpt-test.bin>: about to boot
+TRACE:simple_boot: sending 15848 bytes, crc32=ccfd8156
+BOOT:waiting for a start
+DEBUG:PRINT_STRING:pi sent print: <UART Chris Pondoc: success: Received the program!>
+BOOT:bootloader: Done.
+set breakpoint for addr 0x810c
+about to call 0x810c: should see a fault!
+pc=0x810c, foo=0x810c
+ifar=0x0
+ifsr=0x2
+dscr[2:5]=1
+TRACE:foo:running foo: 0
+TRACE:notmain:worked!  fill do 10 repeats
+TRACE:notmain:should see a breakpoint fault!
+pc=0x810c, foo=0x810c
+ifar=0x0
+ifsr=0x2
+dscr[2:5]=1
+TRACE:foo:running foo: 0
+TRACE:notmain:n_faults=1, i=0
+TRACE:notmain:should see a breakpoint fault!
+pc=0x810c, foo=0x810c
+ifar=0x0
+ifsr=0x2
+dscr[2:5]=1
+TRACE:foo:running foo: 1
+TRACE:notmain:n_faults=2, i=1
+TRACE:notmain:should see a breakpoint fault!
+pc=0x810c, foo=0x810c
+ifar=0x0
+ifsr=0x2
+dscr[2:5]=1
+TRACE:foo:running foo: 2
+TRACE:notmain:n_faults=3, i=2
+TRACE:notmain:should see a breakpoint fault!
+pc=0x810c, foo=0x810c
+ifar=0x0
+ifsr=0x2
+dscr[2:5]=1
+TRACE:foo:running foo: 3
+TRACE:notmain:n_faults=4, i=3
+TRACE:notmain:should see a breakpoint fault!
+pc=0x810c, foo=0x810c
+ifar=0x0
+ifsr=0x2
+dscr[2:5]=1
+TRACE:foo:running foo: 4
+TRACE:notmain:n_faults=5, i=4
+TRACE:notmain:should see a breakpoint fault!
+pc=0x810c, foo=0x810c
+ifar=0x0
+ifsr=0x2
+dscr[2:5]=1
+TRACE:foo:running foo: 5
+TRACE:notmain:n_faults=6, i=5
+TRACE:notmain:should see a breakpoint fault!
+pc=0x810c, foo=0x810c
+ifar=0x0
+ifsr=0x2
+dscr[2:5]=1
+TRACE:foo:running foo: 6
+TRACE:notmain:n_faults=7, i=6
+TRACE:notmain:should see a breakpoint fault!
+pc=0x810c, foo=0x810c
+ifar=0x0
+ifsr=0x2
+dscr[2:5]=1
+TRACE:foo:running foo: 7
+TRACE:notmain:n_faults=8, i=7
+TRACE:notmain:should see a breakpoint fault!
+pc=0x810c, foo=0x810c
+ifar=0x0
+ifsr=0x2
+dscr[2:5]=1
+TRACE:foo:running foo: 8
+TRACE:notmain:n_faults=9, i=8
+TRACE:notmain:should see a breakpoint fault!
+pc=0x810c, foo=0x810c
+ifar=0x0
+ifsr=0x2
+dscr[2:5]=1
+TRACE:foo:running foo: 9
+TRACE:notmain:n_faults=10, i=9
+TRACE:notmain:SUCCESS
+DONE!!!
+
+bootloader: pi exited.  cleaning up

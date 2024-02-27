@@ -1,0 +1,45 @@
+DEBUG:done with options: dev name=</dev/cu.usbserial-1210>, pi-prog=<./7-mini-step-trace-only.bin>, trace=0
+Device: /dev/cu.usbserial-1210
+opened tty port </dev/cu.usbserial-1210>.
+DEBUG:my-install: tty-usb=</dev/cu.usbserial-1210> program=<./7-mini-step-trace-only.bin>: about to boot
+TRACE:simple_boot: sending 17412 bytes, crc32=706973f7
+BOOT:waiting for a start
+expected initial GET_PROG_INFO, got <112222fe>: discarding.
+DEBUG:PRINT_STRING:pi sent print: <UART Chris Pondoc: success: Received the program!>
+BOOT:bootloader: Done.
+---------------------------------------------
+going to run trivial handler
+about to run nop10()!
+TRACE: cnt=0: pc=0x8044
+TRACE: cnt=0: pc=0x8048
+TRACE: cnt=0: pc=0x804c
+TRACE: cnt=0: pc=0x8050
+TRACE: cnt=0: pc=0x8054
+TRACE: cnt=0: pc=0x8058
+TRACE: cnt=0: pc=0x805c
+TRACE: cnt=0: pc=0x8060
+TRACE: cnt=0: pc=0x8064
+TRACE: cnt=0: pc=0x8068
+TRACE: cnt=0: pc=0x806c
+done pc=0x8778: resuming initial caller
+done nop10()!
+about to run mov_ident()!
+TRACE: cnt=0: pc=0x80a0
+TRACE: cnt=0: pc=0x80a4
+TRACE: cnt=0: pc=0x80a8
+TRACE: cnt=0: pc=0x80ac
+TRACE: cnt=0: pc=0x80b0
+TRACE: cnt=0: pc=0x80b4
+TRACE: cnt=0: pc=0x80b8
+TRACE: cnt=0: pc=0x80bc
+TRACE: cnt=0: pc=0x80c0
+TRACE: cnt=0: pc=0x80c4
+TRACE: cnt=0: pc=0x80c8
+TRACE: cnt=0: pc=0x80cc
+TRACE: cnt=0: pc=0x80d0
+TRACE: cnt=0: pc=0x80d4
+done pc=0x8778: resuming initial caller
+done mov_ident()!
+DONE!!!
+
+bootloader: pi exited.  cleaning up

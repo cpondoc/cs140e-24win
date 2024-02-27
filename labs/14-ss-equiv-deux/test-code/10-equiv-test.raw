@@ -1,0 +1,44 @@
+DEBUG:done with options: dev name=</dev/cu.usbserial-1210>, pi-prog=<./10-equiv-test.bin>, trace=0
+Device: /dev/cu.usbserial-1210
+opened tty port </dev/cu.usbserial-1210>.
+DEBUG:my-install: tty-usb=</dev/cu.usbserial-1210> program=<./10-equiv-test.bin>: about to boot
+TRACE:simple_boot: sending 17736 bytes, crc32=3078e2fc
+BOOT:waiting for a start
+DEBUG:PRINT_STRING:pi sent print: <UART Chris Pondoc: success: Received the program!>
+BOOT:bootloader: Done.
+hello from 1
+TRACE:equiv_syscall_handler:thread=1 exited with code=10, hash=0xda7456a5
+TRACE:equiv_syscall_handler:done with all threads
+TRACE:equiv_run:done, returning
+TRACE:run_single:--------------done first run!-----------------
+hello from 2
+TRACE:equiv_syscall_handler:thread=2 exited with code=10, hash=0x413c55e1
+TRACE:equiv_syscall_handler:done with all threads
+TRACE:equiv_run:done, returning
+TRACE:run_single:--------------done first run!-----------------
+hello from 3
+TRACE:equiv_syscall_handler:thread=3 exited with code=10, hash=0x11c98ac9
+TRACE:equiv_syscall_handler:done with all threads
+TRACE:equiv_run:done, returning
+TRACE:run_single:--------------done first run!-----------------
+hhheeellllllooo   fffrrrooommm   321
+
+
+TRACE:equiv_syscall_handler:thread=3 exited with code=10, hash=0x11c98ac9
+TRACE:equiv_syscall_handler:EXIT HASH MATCH: tid=3: hash=0x11c98ac9
+TRACE:equiv_syscall_handler:thread=2 exited with code=10, hash=0x413c55e1
+TRACE:equiv_syscall_handler:EXIT HASH MATCH: tid=2: hash=0x413c55e1
+TRACE:equiv_syscall_handler:thread=1 exited with code=10, hash=0xda7456a5
+TRACE:equiv_syscall_handler:EXIT HASH MATCH: tid=1: hash=0xda7456a5
+TRACE:equiv_syscall_handler:done with all threads
+TRACE:equiv_run:done, returning
+TRACE:notmain:stack passed!
+---------------------------------------------------
+about to do quiet run
+hhheeellllllooo   fffrrrooommm   321
+
+
+TRACE:notmain:stack passed!
+DONE!!!
+
+bootloader: pi exited.  cleaning up

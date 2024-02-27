@@ -1,0 +1,6 @@
+DEBUG:done with options: dev name=</dev/cu.usbserial-1210>, pi-prog=<./9-equiv-test.bin>, trace=0
+Device: /dev/cu.usbserial-1210
+opened tty port </dev/cu.usbserial-1210>.
+DEBUG:my-install: tty-usb=</dev/cu.usbserial-1210> program=<./9-equiv-test.bin>: about to boot
+TRACE:simple_boot: sending 17696 bytes, crc32=3bf90fa5
+BOOT:waiting for a start

@@ -1,0 +1,36 @@
+DEBUG:done with options: dev name=</dev/cu.usbserial-1210>, pi-prog=<./6-mini-watch-byte-access.bin>, trace=0
+Device: /dev/cu.usbserial-1210
+opened tty port </dev/cu.usbserial-1210>.
+DEBUG:my-install: tty-usb=</dev/cu.usbserial-1210> program=<./6-mini-watch-byte-access.bin>: about to boot
+TRACE:simple_boot: sending 15496 bytes, crc32=db1b1649
+BOOT:waiting for a start
+DEBUG:PRINT_STRING:pi sent print: <UART Chris Pondoc: success: Received the program!>
+BOOT:bootloader: Done.
+TRACE:test_bad_addr:about to test addr 0x0
+TRACE:test_bad_addr:set watchpoint for addr 0x0
+TRACE:test_bad_addr:should see a store fault!
+store fault at pc=0xa3cc, addr=0x0
+TRACE:test_bad_addr:should see a load fault!
+load fault at pc=0xa3d4, addr=0x0
+TRACE:test_bad_addr:about to test addr 0x1
+TRACE:test_bad_addr:set watchpoint for addr 0x1
+TRACE:test_bad_addr:should see a store fault!
+store fault at pc=0xa3cc, addr=0x1
+TRACE:test_bad_addr:should see a load fault!
+load fault at pc=0xa3d4, addr=0x1
+TRACE:test_bad_addr:about to test addr 0x2
+TRACE:test_bad_addr:set watchpoint for addr 0x2
+TRACE:test_bad_addr:should see a store fault!
+store fault at pc=0xa3cc, addr=0x2
+TRACE:test_bad_addr:should see a load fault!
+load fault at pc=0xa3d4, addr=0x2
+TRACE:test_bad_addr:about to test addr 0x3
+TRACE:test_bad_addr:set watchpoint for addr 0x3
+TRACE:test_bad_addr:should see a store fault!
+store fault at pc=0xa3cc, addr=0x3
+TRACE:test_bad_addr:should see a load fault!
+load fault at pc=0xa3d4, addr=0x3
+TRACE:notmain:SUCCESS
+DONE!!!
+
+bootloader: pi exited.  cleaning up

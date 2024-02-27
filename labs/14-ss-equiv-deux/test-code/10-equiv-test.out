@@ -1,0 +1,22 @@
+TRACE:equiv_syscall_handler:thread=1 exited with code=10, hash=0xda7456a5
+TRACE:equiv_syscall_handler:done with all threads
+TRACE:equiv_run:done, returning
+TRACE:run_single:--------------done first run!-----------------
+TRACE:equiv_syscall_handler:thread=2 exited with code=10, hash=0x413c55e1
+TRACE:equiv_syscall_handler:done with all threads
+TRACE:equiv_run:done, returning
+TRACE:run_single:--------------done first run!-----------------
+TRACE:equiv_syscall_handler:thread=3 exited with code=10, hash=0x11c98ac9
+TRACE:equiv_syscall_handler:done with all threads
+TRACE:equiv_run:done, returning
+TRACE:run_single:--------------done first run!-----------------
+TRACE:equiv_syscall_handler:thread=3 exited with code=10, hash=0x11c98ac9
+TRACE:equiv_syscall_handler:EXIT HASH MATCH: tid=3: hash=0x11c98ac9
+TRACE:equiv_syscall_handler:thread=2 exited with code=10, hash=0x413c55e1
+TRACE:equiv_syscall_handler:EXIT HASH MATCH: tid=2: hash=0x413c55e1
+TRACE:equiv_syscall_handler:thread=1 exited with code=10, hash=0xda7456a5
+TRACE:equiv_syscall_handler:EXIT HASH MATCH: tid=1: hash=0xda7456a5
+TRACE:equiv_syscall_handler:done with all threads
+TRACE:equiv_run:done, returning
+TRACE:notmain:stack passed!
+TRACE:notmain:stack passed!

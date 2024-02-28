@@ -222,3 +222,50 @@ void pin_mmu_switch(uint32_t pid, uint32_t asid) {
     assert(null_pt);
     staff_mmu_set_ctx(pid, asid, null_pt);
 }
+
+void lockdown_print_entry(unsigned idx) {
+    trace("   idx=%d\n", idx);
+    lockdown_index_set(idx);
+    uint32_t va_ent = lockdown_va_get();
+    uint32_t pa_ent = lockdown_pa_get();
+    unsigned v = bit_get(pa_ent, 0);
+
+    if(!v) {
+        trace("     [invalid entry %d]\n", idx);
+        return;
+    }
+
+    // 3-149
+    uint32_t va = bits_get(va_ent, 12, 31);
+    uint32_t G = bit_is_on(va_ent, 9);
+    uint32_t asid = bits_get(va_ent, 0, 7);
+    trace("     va_ent=%x: va=%x|G=%d|ASID=%d\n",
+        va_ent, va, G, asid);
+
+    // 3-150
+    uint32_t pa = bits_get(pa_ent, 12, 31);
+    uint32_t nsa = bit_is_on(pa_ent, 9);
+    uint32_t nstid = bit_is_on(pa_ent, 8);
+    uint32_t size = bits_get(pa_ent, 6, 7);
+    uint32_t apx = (bit_is_on(pa_ent, 3) << 2) + bits_get(pa_ent, 1, 2);
+    trace("     pa_ent=%x: pa=%x|nsa=%d|nstid=%d|size=%b|apx=%b|v=%d\n",
+                pa_ent, pa, nsa,nstid,size, apx,v);
+
+    // 3-151
+    uint32_t attr = lockdown_attr_get();
+    uint32_t dom = bits_get(attr, 7, 10);
+    uint32_t xn = bit_is_on(attr, 6);
+    uint32_t tex = bits_get(attr, 3, 5);
+    uint32_t C = bit_is_on(attr, 2);
+    uint32_t B = bit_is_on(attr, 1);
+    trace("     attr=%x: dom=%d|xn=%d|tex=%b|C=%d|B=%d\n",
+            attr, dom,xn,tex,C,B);
+}
+    
+void lockdown_print_entries(const char *msg) {
+    trace("-----  <%s> ----- \n", msg);
+    trace("  pinned TLB lockdown entries:\n");
+    for(int i = 0; i < 8; i++)
+        lockdown_print_entry(i);
+    trace("----- ---------------------------------- \n");
+}

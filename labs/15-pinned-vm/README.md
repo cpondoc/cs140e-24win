@@ -6,8 +6,10 @@
 
 
 tl;dr: the goal:
-  1. Get rid of `staff-pinned-vm.o` in the `Makefile`.
-  2. `make check` should pass for all the tests.
+  1. Get rid of `staff-pinned-vm.o` in the `Makefile`.  
+  2. `make check` should pass for all the tests.  You'll have
+     to modify some of the calls to staff routines (the ones 
+     that were in `staff-pinned-vm.o`).
   3. You will also have to write some exception handling code to 
      disambiguate the cause of exceptions (see part 4).
   4. I would do the tests in order.  The first one `1-test-basic.c`
@@ -135,7 +137,7 @@ state) there's a bunch of data structure code.   The rough breakdown:
 #### Check-off
 
 You need to show that:
-  1. You replaced all `staff_mmu_*` routines with yours and everything works.
+  1. You aren't linking against `staff-pinned-vm.o`.
   2. You can handle protection and unallowed access faults.
 
 ------------------------------------------------------------------------------
@@ -234,8 +236,28 @@ If you want to use our stuff, there's a few helpers you implement.
 ----------------------------------------------------------------------
 ## Part 2: implement `pinned-vm.c:pin_mmu_init(uint32_t domain_reg)` 
 
+***NOTE:***
+  - Mostly ignore the comment in `pinned-vm.c` that says what to do.
+    You can look at the two test cases (see below) and do a diff against
+    `1-test-basic.c`.
+
+  - This part is mainly to get you to read the test case and understand
+    it since it's an extended example of how to do vm.  You want to 
+    (1) initialize the hardware, (2) create the null page table, and
+    (3) set the domain register.
+
 You should be able to pretty easily finish `pin_mmu_init` using
 the code from the first test case.
+
+You will have to modify two test cases to call your code instead of ours:
+
+```
+        code/tests % grep pin_mmu_init *.c
+        1-test-setup.c:    staff_pin_mmu_init(~0);
+        1-test-two-addr.c:    staff_pin_mmu_init(d);
+```
+as well as `procmap.h` to call `pin_mmu_init` and `pin_mmu_switch`
+instead of `staff_pin_mmu_init` and `staff_pin_mmu_switch`.
 
 It will be convenient later to pass in a data structure that contains
 the mapping of the kernel rather than embedding the addresses in a bunch
@@ -248,6 +270,9 @@ what is going on.  Start with:
 ----------------------------------------------------------------------
 ## Part 3: implement `pinned-vm.c:lockdown_print_entries`
 
+***NOTE:***
+  - our `apx` is actually `apx` + `ap`  on page 3-151 (so 3 bits
+    in total).
 
 Mine is something like:
 
@@ -302,7 +327,9 @@ A domain fault.  Write a single test that:
      fault (using the `dfsr`), re-enables the domain permissions, and returns.
   4. Do (2) and (3) for store.  Use (`PUT32`) so you can check the `pc`.
   5. Do (2) and (3) for a jump.  You'll have to write the instruction
-     for `bx lr` to a heap location and jump to it.
+     for `bx lr` to a heap location and jump to it.  Note: for this 
+     you'll need to also install a `prefetch` abort handler 
+     (just like we did last lab).
 
 Useful domain pages:
   - B4-10: what the bit values mean for the `domain` field.
@@ -310,15 +337,11 @@ Useful domain pages:
   - B4-27: the location / size of the `domain` field in the segment page table entry.
   - B4-42: setting the domain register.
 
-A invalid access fault:
-  1. Write tests that 
-     do load, store, and jump to an unmapped addresss and extend the
-     data abort and prefetch abort handlers above to print out the 
-     reason and faulting address.
 
 
-NOTE: if you delete `staff-mmu-except.o` and your `panic` or `reboot`
-locks up, add this code to your pinned-vm.c`:
+NOTE: (I don't think this applies today, but just in case): if you delete
+`staff-mmu-except.o` and your `panic` or `reboot` locks up, add this
+code to your pinned-vm.c`:
 
         // this is called by reboot: we turn off mmu so that things work.
         void reboot_callout(void) {
@@ -381,6 +404,9 @@ Result:
   3. As a nice bonus: All the addresses are the same in both pieces of
   code, which makes many things easier.
 
+You can do this as an extension!
+
+
 ##### Bits to set in Domain
 <table><tr><td>
   <img src="images/part2-domain.png"/>
@@ -390,7 +416,7 @@ Result:
 ### Extension: speed.
 
 One drawback of our arm1176 is that without virtual memory
-we can't turn on data caching.  But, what do you know.  We 
+we can't turn on data caching.  But, what do you know: We 
 now have VM.
 
 So:

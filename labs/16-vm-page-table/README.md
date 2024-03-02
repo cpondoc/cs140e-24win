@@ -4,6 +4,19 @@
   <img src="images/pi-vm.jpg" width="650" />
 </p>
 
+----------------------------------------------------------------------
+***NOTE:***
+ - The test `.out` files were checked in without hashes of all
+   the page table modifications.  This makes them pretty weak and easy to
+   pass with mistakes that will bite you later.   I've checked in fixed
+   versions in `code/tests-2.0`.  You'll have to add the following line
+   defining `GREP_STR` in your `Makefile`  and change your tests to use
+   `tests-2.0` vs `tests`.
+
+        # add this line at the bottom of `Makefile`.
+        GREP_STR := 'TRACE:\|HASH:\|ERROR:\|PANIC:\|SUCCESS:'
+        include $(CS140E_2024_PATH)/libpi/mk/Makefile.robust
+----------------------------------------------------------------------
 
 Last lab we did a trivial virtual memory system without page tables by pinning
 entries in the TLB.  This approach lets us map a reasonable amount of memory
@@ -239,7 +252,11 @@ Some simple examples:
  - Setup a user mode process and make sure that it can't access
    kernel memory.
  - Make a stack that automatically grows (e.g., if you write beyond
-   the stack pointer it grows the stack automatically).
+   the stack pointer it grows the stack automatically).    As mentioned
+   in the next point, 
+   you should call `staff_mmu_sync_pte_mods()` after you modify 
+   a page table entry.  (This invalidates caches it could be in or
+   influence.)
  - Change memory protection (implement `vm_mprotect`), show it faults,
    and change back.  (Note: when you modify existing page table entries
    you will have to call `staff_mmu_sync_pte_mods` after you modify the

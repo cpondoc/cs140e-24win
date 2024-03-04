@@ -21,13 +21,33 @@ enum { OneMB = 1024*1024};
 // used to store the illegal address we will write.
 static volatile uint32_t illegal_addr;
 
+uint32_t kern_stack = STACK_ADDR-OneMB;
+
+vm_pt_t *pt;
+pin_t kern;
+
 // a trivial fault handler that checks that we got the fault
 // we expected.
 static void fault_handler(regs_t *r) {
     uint32_t fault_addr;
 
-    // b4-44
+    // Outline:
+    // Check if threshold less than around 1 MB
+    // If it is, then we want to basically just like, move the kernal stack down by onemb (subtract)
+    // Then, redo the mapping (no need to call the function)
+
+    // b4-44 -- get the fault address
     asm volatile("MRC p15, 0, %0, c6, c0, 0" : "=r" (fault_addr));
+
+    // Check if threshold is less than 1 MB
+    if (kern_stack - fault_addr < OneMB) {
+        // Grow the kernel stack by 1 MB to be safe
+        kern_stack = kern_stack - OneMB;
+        trace("Adjusting the kernal stack -- new address: %x", kern_stack);
+
+        // Redo the mapping
+        vm_map_sec(pt, kern_stack, kern_stack, kern);
+    }
 
     // make sure we faulted on the address that should be accessed.
     if(fault_addr != illegal_addr)
@@ -54,7 +74,7 @@ void notmain(void) {
     // map the heap: for lab cksums must be at 0x100000.
     kmalloc_init_set_start((void*)OneMB, OneMB);
 
-    vm_pt_t *pt = vm_pt_alloc(PT_LEVEL1_N);
+    pt = vm_pt_alloc(PT_LEVEL1_N);
 
     // initialize everything, after bootup.
     // <mmu.h>
@@ -93,7 +113,7 @@ void notmain(void) {
 
     // protection: same as device.
     // memory rules: uncached access.
-    pin_t kern = pin_mk_global(dom_kern, no_user, MEM_uncached);
+    kern = pin_mk_global(dom_kern, no_user, MEM_uncached);
 
     // Q1: if you uncomment this, what happens / why?
     // kern = pin_mk_global(dom_kern, perm_ro_priv, MEM_uncached);
@@ -108,7 +128,7 @@ void notmain(void) {
     vm_map_sec(pt, OneMB, OneMB, kern);     
 
     // now map kernel stack (or nothing will work)
-    uint32_t kern_stack = STACK_ADDR-OneMB;
+    
     vm_map_sec(pt, kern_stack, kern_stack, kern);   // tlb 5
     uint32_t except_stack = INT_STACK_ADDR-OneMB;
 
@@ -161,27 +181,8 @@ void notmain(void) {
     full_except_install(0);
     full_except_set_data_abort(fault_handler);
 
-    // Set up the initial addr of the heap, check that we will handle offsets
-    uint32_t illegal_addr = OneMB;
-
-    // Keep track of the PA at each VA, and then also the original PA at 0
-    uint32_t *pa = 0;
-    uint32_t orig_pa = 0;
-
-    // Iterate through each possible offset, and translate
-    trace("Look at offsets!\n");
-    for (uint32_t i = 0; i < OneMB; i++) {
-        if (vm_xlate(pa, pt, illegal_addr)) {
-
-            // Assert that each following 
-            if (orig_pa == 0) {
-                orig_pa = *pa;
-            } else {
-                if (*pa != orig_pa) {
-                    panic("Offsets are incorrect! Check code!\n");
-                }
-            }
-        }
-    }
-    trace("Successfully looked through all offsets!\n");
+    // Try to do a GET32 at a memory location below the kernel stack
+    illegal_addr = kern_stack - 500;
+    vm_mmu_enable();
+    GET32(illegal_addr);
 }

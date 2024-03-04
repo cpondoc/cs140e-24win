@@ -5,6 +5,7 @@ BOOTLOADER = my-install
 # PROGS += tests/1-test-two-addr.c
 # PROGS += tests/2-test-procmap.c
 PROGS += tests/5-test-offsets.c
+PROGS += tests/5-test-stack.c
 # PROGS += tests/4-test-basic.c
 
 O = $(CS140E_2024_PATH)/libpi

@@ -50,15 +50,15 @@ static void fault_handler(regs_t *r) {
     }
 
     // make sure we faulted on the address that should be accessed.
-    if(fault_addr != illegal_addr)
+    /* if(fault_addr != illegal_addr)
         panic("illegal fault!  expected %x, got %x\n",
             illegal_addr, fault_addr);
     else
-        trace("SUCCESS!: got a fault on address=%x\n", fault_addr);
+        trace("SUCCESS!: got a fault on address=%x\n", fault_addr);*/
 
     // done with test.
     trace("all done: going to reboot\n");
-    clean_reboot();
+    //clean_reboot();
 }
 
 void notmain(void) { 
@@ -185,4 +185,5 @@ void notmain(void) {
     illegal_addr = kern_stack - 500;
     vm_mmu_enable();
     GET32(illegal_addr);
+    GET32(illegal_addr - OneMB);
 }

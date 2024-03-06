@@ -14,9 +14,16 @@
 //  0xe1e1e1,
 //  0xd3d3d3,
 
-enum {
+// Original
+/* enum {
     server_addr = 0xd5d5d5,
-    client_addr = 0xe5e5e5,
+    client_addr = 0xe5e5e5
+}; */
+
+// Flipped
+enum {
+    client_addr = 0xd5d5d5,
+    server_addr = 0xe5e5e5
 };
 
 enum {

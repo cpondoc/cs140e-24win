@@ -18,6 +18,8 @@
         "armv6-debug-impl.h": "c",
         "cpsr-util.h": "c",
         "initializer_list": "c",
-        "utility": "c"
+        "utility": "c",
+        "cmath": "c",
+        "nrf.h": "c"
     }
 }

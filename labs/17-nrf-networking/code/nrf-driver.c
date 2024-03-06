@@ -406,7 +406,41 @@ int nrf_tx_send_noack(nrf_t *n, uint32_t txaddr,
     // NOTE: 
     //   - If nRF24L01+ is in standby-II mode, it goes to 
     //     standby-I mode immediately if CE is set low.
-    int res = staff_nrf_tx_send_noack(n, txaddr, msg, nbytes);
+
+    // Set the TX Address
+    nrf_set_addr(n, NRF_TX_ADDR, txaddr, nrf_default_addr_nbytes);
+
+    // Put packet on TX fifo
+    nrf_putn(n, NRF_W_TX_PAYLOAD, msg, nbytes);
+
+    // First go to Standby-I
+    gpio_set_off(n->config.ce_pin);
+
+    // Go to TX mode, start transmit
+    nrf_put8_chk(n, NRF_CONFIG, tx_config);
+    gpio_set_on(n->config.ce_pin);
+
+    // Wait until the FIFO is empty
+    while (!nrf_has_tx_intr(n));
+
+    // Assert TX fifo is empty
+    assert(nrf_tx_fifo_empty(n));
+
+    // Clear the tx interrupt
+    nrf_tx_intr_clr(n);
+
+    // Go from Standby-II to Standby-I
+    gpio_set_off(n->config.ce_pin);
+    
+    // Standby-I to RX Mode
+    nrf_put8_chk(n, NRF_CONFIG, rx_config);
+    gpio_set_on(n->config.ce_pin);
+
+    // Return number of bytes sent
+    int res = nbytes;
+
+    // Correct staff (uncomment to get it to work)
+    //int res = staff_nrf_tx_send_noack(n, txaddr, msg, nbytes);
 
     // after done: tx interrupt better be cleared.
     nrf_opt_assert(n, !nrf_has_tx_intr(n));

@@ -4,6 +4,46 @@
   <img src="images/pi-network.jpg" width="650" />
 </p>
 
+#### NOTE 1: To set or get `NRF_RX_ADDR_*` or `NRF_TX_ADDR`
+
+Use the `nrf_set_addr` routine to set the addr for example:
+
+```
+    nrf_set_addr(n, NRF_TX_ADDR, 0, addr_nbytes);
+    ...
+    nrf_set_addr(n, NRF_RX_ADDR_P1, rxaddr, addr_nbytes);
+```
+
+And `nrf_get_addr` to get the address.
+
+The reason is that the address can be 3 bytes, 4 bytes or 5 bytes
+depending on the configuration.   Doing a `put8` or `get8`
+won't work.
+
+
+#### NOTE 2: if you're having config problems
+
+Update the tests and do a comparison:
+
+  - Currently the checked in outputs for the 0 tests ignore most
+    of the config b/c they don't contain all the `NRF:` prints.
+  - If you look in tests-2.0 they have the full test of NRF values 
+    in the `.out files`.
+  - You'll want to compare these against the ones you have.
+    Either by running the code manually using `my-install`
+    or changing your `Makefile` to use the `test-2.0` tests
+    for the 0 tests and changing the bottom of your Makefile to have
+    `GREP_STR`:
+
+            BOOTLOADER = my-install
+            EXCLUDE ?= grep -v simple_boot
+            GREP_STR := 'HASH:\|ERROR:\|PANIC:\|SUCCESS:\|NRF:'
+            include $(CS140E_2024_PATH)/libpi/mk/Makefile.robust
+
+  - also if you have issues with part 1 part 2 part 3 the first
+    thing to do is to switch to using the `staff_nrf_init` routine.
+
+#### Description
 
 Today you'll build some code to make the NRF chips we have talk to
 each other.   The lab is organized as a fetch-quest where you'll build

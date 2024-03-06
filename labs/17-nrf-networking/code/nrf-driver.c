@@ -81,7 +81,11 @@ static inline void ce_hi(uint8_t ce) {
 
 // initialize the NRF: [extension: pass in a channel]
 nrf_t *nrf_init(nrf_conf_t c, uint32_t rxaddr, unsigned acked_p) {
-    nrf_t *n = kmalloc(sizeof *n);
+    // Correct staff function
+    // nrf_t *n = staff_nrf_init(c, rxaddr, acked_p);
+    const char *msg="";
+
+     nrf_t *n = kmalloc(sizeof *n);
     n->config = c;      // set initial config.
     nrf_stat_start(n);  // reset stats.
 
@@ -100,6 +104,7 @@ nrf_t *nrf_init(nrf_conf_t c, uint32_t rxaddr, unsigned acked_p) {
 
     if(!acked_p) {
         // reg1: disable retran.
+        nrf_put8_chk(n, NRF_SETUP_RETR, 0);
         nrf_put8_chk(n, NRF_EN_AA, 0);
 
         // reg2: enable pipe 1.
@@ -132,15 +137,6 @@ nrf_t *nrf_init(nrf_conf_t c, uint32_t rxaddr, unsigned acked_p) {
         assert(nrf_pipe_is_acked(n, 0));
     }
 
-    // dynamic payload
-    nrf_put8_chk(n, NRF_DYNPD, 0);
-    // feature register.
-    nrf_put8_chk(n, NRF_FEATURE, 0);
-
-    // Clear FIFOs?
-    nrf_rx_flush(n);
-    nrf_tx_flush(n);
-
     // turn off the other pipes.
     // covered with above
 
@@ -148,16 +144,26 @@ nrf_t *nrf_init(nrf_conf_t c, uint32_t rxaddr, unsigned acked_p) {
     unsigned bytes = nrf_default_addr_nbytes - 2;
     nrf_put8_chk(n, NRF_SETUP_AW, bytes);
 
+    // Zero out the TX Addr and potentially RX Addr
+    nrf_set_addr(n, NRF_TX_ADDR, 0, nrf_default_addr_nbytes);
+    if (acked_p) {
+        nrf_set_addr(n, NRF_RX_ADDR_P0, rxaddr, nrf_default_addr_nbytes);
+    }
+
     // Set the RX addr
     nrf_set_addr(n, NRF_RX_ADDR_P1, rxaddr, nrf_default_addr_nbytes);
 
     // Set message size = 0 for unused pipes.  
     //  [NOTE: I think redundant, but just to be sure.]
-    nrf_put8_chk(n, NRF_RX_PW_P1, nrf_default_nbytes);
+    nrf_put8_chk(n, NRF_RX_PW_P0, nrf_default_nbytes);
+    nrf_put8_chk(n, NRF_RX_PW_P1, c.nbytes);
     nrf_put8_chk(n, NRF_RX_PW_P2, 0);
     nrf_put8_chk(n, NRF_RX_PW_P3, 0);
     nrf_put8_chk(n, NRF_RX_PW_P4, 0);
     nrf_put8_chk(n, NRF_RX_PW_P5, 0);
+
+
+    // If not acked, set to 0
 
     // reg=5: RF_CH: setup channel --- this is for all addresses.
     nrf_put8_chk(n, NRF_RF_CH, nrf_default_channel);
@@ -172,7 +178,19 @@ nrf_t *nrf_init(nrf_conf_t c, uint32_t rxaddr, unsigned acked_p) {
 
     // reg=7: status.  p59
     // sanity check that it is empty and nothing else is set.
-    nrf_put8(n, NRF_STATUS, 0);
+
+
+    // Clear FIFOs?
+    nrf_rx_flush(n);
+    nrf_tx_flush(n);
+
+    // set to reset values
+    nrf_put8(n, NRF_STATUS, ~0);
+    
+    // dynamic payload
+    nrf_put8_chk(n, NRF_DYNPD, 0);
+    // feature register.
+    nrf_put8_chk(n, NRF_FEATURE, 0);
 
     //
     // NOTE: if we are in the midst of an active system,
@@ -196,10 +214,12 @@ nrf_t *nrf_init(nrf_conf_t c, uint32_t rxaddr, unsigned acked_p) {
     // make sure you delay long enough
     // Power Down to Standby-I
     nrf_set_pwrup_on(n);
+    delay_us(2);
 
     // Standby-I to RX
     nrf_put8_chk(n, NRF_CONFIG, rx_config);
     gpio_set_on(c.ce_pin);
+    delay_us(130);
 
 #if 0
     nrf_t *n = kmalloc(sizeof *n);
@@ -367,7 +387,48 @@ int nrf_tx_send_ack(nrf_t *n, uint32_t txaddr,
     //  - if you get more than max_rt_interrupts
     //    you can panic for today.  but dump out the 
     //    configuration: good chance its a bad configure.
-    int res = staff_nrf_tx_send_ack(n, txaddr, msg, nbytes);
+    
+    // Set the pipe 0 for acks
+    nrf_set_addr(n, NRF_RX_ADDR_P0, txaddr, nrf_default_addr_nbytes);
+
+    // Set the TX Address
+    nrf_set_addr(n, NRF_TX_ADDR, txaddr, nrf_default_addr_nbytes);
+
+    // Put packet on TX fifo
+    nrf_putn(n, NRF_W_TX_PAYLOAD, msg, nbytes);
+
+    // First go to Standby-I
+    gpio_set_off(n->config.ce_pin);
+
+    // Go to TX mode, start transmit
+    nrf_put8_chk(n, NRF_CONFIG, tx_config);
+    gpio_set_on(n->config.ce_pin);
+
+    // Wait until the FIFO is empty
+    while (!nrf_has_tx_intr(n));
+
+    // Assert TX fifo is empty
+    assert(nrf_tx_fifo_empty(n));
+
+    // Clear the tx interrupt
+    nrf_tx_intr_clr(n);
+
+    // If we hit max retransmissions, just panic!
+    if (nrf_has_max_rt_intr(n)) {
+        panic("Shouldn't max RT?");
+    }
+
+    // Go from Standby-II to Standby-I
+    gpio_set_off(n->config.ce_pin);
+    
+    // Standby-I to RX Mode
+    nrf_put8_chk(n, NRF_CONFIG, rx_config);
+    gpio_set_on(n->config.ce_pin);
+
+    // Return number of bytes sent
+    int res = nbytes;
+
+    // int res = staff_nrf_tx_send_ack(n, txaddr, msg, nbytes);
 
     // How to increment the total number of retransmissions.
     //  uint8_t cnt = nrf_get8(n, NRF_OBSERVE_TX);
@@ -481,7 +542,38 @@ int nrf_get_pkts(nrf_t *n) {
     //       if so, repeat from (1) --- we need to do this now in case
     //       a packet arrives b/n (1) and (2)
     // } while (rx fifo is not empty)
-    int res = staff_nrf_get_pkts(n);
+
+    // Correct staff function
+    // int res = staff_nrf_get_pkts(n);
+
+    // Do the packets 
+    int res = 0;
+    do {
+        // Check that this is not true
+        assert(nrf_rx_get_pipeid(n) != NRF_PIPEID_EMPTY);
+
+        // Read packet thorugh SPI
+        void *buf = 0;
+        nrf_getn(n, NRF_R_RX_PAYLOAD, buf, n->config.nbytes);
+
+        // Push onto the receive queue
+        if(!cq_push_n(&n->recvq, buf, n->config.nbytes)) {
+            panic("not enough space in receive queue\n");
+        }
+
+        // Increment relevant fields
+        n->tot_recv_msgs += 1;
+        n->tot_recv_bytes += n->config.nbytes;
+        res += 1;
+
+        // Clear corresponding bit
+        nrf_rx_intr_clr(n);
+
+        // 4. read fifo status to see if more packets: 
+        // if so, repeat from (1) --- we need to do this now in case
+        // a packet arrives b/n (1) and (2)
+
+    } while (!nrf_rx_fifo_empty(n));
 
     nrf_opt_assert(n, nrf_get8(n, NRF_CONFIG) == rx_config);
     return res;

@@ -81,10 +81,125 @@ static inline void ce_hi(uint8_t ce) {
 
 // initialize the NRF: [extension: pass in a channel]
 nrf_t *nrf_init(nrf_conf_t c, uint32_t rxaddr, unsigned acked_p) {
-    nrf_t *n = staff_nrf_init(c, rxaddr, acked_p);
+    nrf_t *n = kmalloc(sizeof *n);
+    n->config = c;      // set initial config.
+    nrf_stat_start(n);  // reset stats.
 
-    // start of initialization: go through and handle no-ack first,
-    // then ack.  i'd do one test at a time.
+    // configure the spi hardware and ce pin.
+    n->spi = nrf_spi_init(c.ce_pin, c.spi_chip);
+
+    n->rxaddr = rxaddr;     // set the rxaddr
+    cq_init(&n->recvq, 1);  // initialize the circular queue
+
+    // put in PWR_DOWN so can configure.
+    nrf_put8_chk(n, NRF_CONFIG, 0);
+    assert(!nrf_is_pwrup(n));
+
+    // disable all pipes.
+    nrf_put8_chk(n, NRF_EN_RXADDR, 0);
+
+    if(!acked_p) {
+        // reg1: disable retran.
+        nrf_put8_chk(n, NRF_EN_AA, 0);
+
+        // reg2: enable pipe 1.
+        nrf_put8_chk(n, NRF_EN_RXADDR, 0b10);
+
+        assert(nrf_pipe_is_enabled(n, 1));
+        assert(!nrf_pipe_is_acked(n, 1));
+        assert(!nrf_pipe_is_enabled(n, 0));
+    
+    } else {
+        // reg=1: p57
+        // both retran pipe(0) and pipe 1 have to be ENAA_P0 = 1 (p75)
+        nrf_put8_chk(n, NRF_EN_AA, 0b11);
+
+        // reg=2: p 57, enable pipes --- always enable pipe 0 for retran.
+        nrf_put8_chk(n, NRF_EN_RXADDR, 0b11);
+        
+        // reg = 4: setup retran
+        // set retrans attempt and delay
+        //  - nrf_default_retran_attempts;
+        //  - nrf_default_retran_delay [note you have to 
+        //    convert to the right encoding]
+        unsigned delay = (nrf_default_retran_delay - 250) / 250;
+        nrf_put8_chk(n, NRF_SETUP_RETR, (delay << 4 | nrf_default_retran_attempts));
+
+        // double check
+        assert(nrf_pipe_is_enabled(n, 0));
+        assert(nrf_pipe_is_enabled(n, 1));
+        assert(nrf_pipe_is_acked(n, 1));
+        assert(nrf_pipe_is_acked(n, 0));
+    }
+
+    // dynamic payload
+    nrf_put8_chk(n, NRF_DYNPD, 0);
+    // feature register.
+    nrf_put8_chk(n, NRF_FEATURE, 0);
+
+    // Clear FIFOs?
+    nrf_rx_flush(n);
+    nrf_tx_flush(n);
+
+    // turn off the other pipes.
+    // covered with above
+
+    // reg=3 setup address size
+    unsigned bytes = nrf_default_addr_nbytes - 2;
+    nrf_put8_chk(n, NRF_SETUP_AW, bytes);
+
+    // Set the RX addr
+    nrf_set_addr(n, NRF_RX_ADDR_P1, rxaddr, nrf_default_addr_nbytes);
+
+    // Set message size = 0 for unused pipes.  
+    //  [NOTE: I think redundant, but just to be sure.]
+    nrf_put8_chk(n, NRF_RX_PW_P1, nrf_default_nbytes);
+    nrf_put8_chk(n, NRF_RX_PW_P2, 0);
+    nrf_put8_chk(n, NRF_RX_PW_P3, 0);
+    nrf_put8_chk(n, NRF_RX_PW_P4, 0);
+    nrf_put8_chk(n, NRF_RX_PW_P5, 0);
+
+    // reg=5: RF_CH: setup channel --- this is for all addresses.
+    nrf_put8_chk(n, NRF_RF_CH, nrf_default_channel);
+
+    // reg=6: RF_SETUP: setup data rate and power.
+    // datarate already has the right encoding.
+    // 
+    // use:
+    //  - nrf_default_data_rate;
+    //  - nrf_default_db;
+    nrf_put8_chk(n, NRF_RF_SETUP, nrf_default_data_rate | nrf_default_db);
+
+    // reg=7: status.  p59
+    // sanity check that it is empty and nothing else is set.
+    nrf_put8(n, NRF_STATUS, 0);
+
+    //
+    // NOTE: if we are in the midst of an active system,
+    // it's possible this node receives a message which will
+    // change these values.   we might want to set the
+    // rx addresses to something that won't get a message.
+    // 
+    // ideally we would do something where we use different 
+    // addresses across reboots?   we get a bit of this benefit
+    // by waiting the 100ms.
+
+    // we skip reg=0x8 (observation)
+    // we skip reg=0x9 (RPD)
+    // we skip reg=0xA (P0)
+    // we skip reg=0x10 (TX_ADDR): used only when sending.
+
+    // i think w/ the nic is off, this better be true.
+    assert(nrf_tx_fifo_empty(n));
+    assert(nrf_rx_fifo_empty(n));
+
+    // make sure you delay long enough
+    // Power Down to Standby-I
+    nrf_set_pwrup_on(n);
+
+    // Standby-I to RX
+    nrf_put8_chk(n, NRF_CONFIG, rx_config);
+    gpio_set_on(c.ce_pin);
 
 #if 0
     nrf_t *n = kmalloc(sizeof *n);

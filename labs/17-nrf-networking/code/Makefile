@@ -4,10 +4,10 @@
 # PROGS := 0-ack-check.c
 
 # ordered easy to harder
-PROGS += $(wildcard tests/0-*.c)
+# PROGS += $(wildcard tests/0-*.c)
 PROGS += $(wildcard tests/1-*.c)
-PROGS += $(wildcard tests/2-*.c)
-PROGS += $(wildcard tests/3-*.c)
+#PROGS += $(wildcard tests/2-*.c)
+#PROGS += $(wildcard tests/3-*.c)
 
 # initially everything should pass.
 # PROGS := $(wildcard tests/[0123]-*.c)

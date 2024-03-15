@@ -1,12 +1,13 @@
 BOOTLOADER = my-install
 
-#PROGS += tests/1-test-basic.c
-#PROGS += tests/1-test-setup.c
-#PROGS += tests/1-test-two-addr.c
-#PROGS += tests/2-test-procmap.c
-#PROGS += tests/5-test-offsets.c
-PROGS += tests/5-test-stack.c
-#PROGS += tests/4-test-basic.c
+PROGS += tests/4-test-vm-cache-mgmt.c
+# PROGS += tests-2.0/1-test-basic.c
+# PROGS += tests-2.0/1-test-setup.c
+# PROGS += tests-2.0/1-test-two-addr.c
+# PROGS += tests-2.0/2-test-procmap.c
+# PROGS += tests/5-test-offsets.c
+# PROGS += tests/5-test-stack.c
+# PROGS += tests/4-test-basic.c
 
 O = $(CS140E_2024_PATH)/libpi
 STAFF_OBJS += $(O)/staff-objs/staff-full-except.o
@@ -24,13 +25,13 @@ COMMON_SRC += mmu-helpers.c
 COMMON_SRC += mmu.c
 
 # make sure can drop in staff.
-STAFF_OBJS += staff-mmu-asm.o  
-STAFF_OBJS += staff-mmu.o  
+# STAFF_OBJS += staff-mmu-asm.o  
+# STAFF_OBJS += staff-mmu.o 
 # STAFF_OBJS += staff-pt-vm.o  
 
 #COMMON_SRC += staff-mmu-asm.S 
 #COMMON_SRC += staff-mmu-except.c 
-#COMMON_SRC += staff-mmu.c 
+# COMMON_SRC += staff-mmu.c 
 #COMMON_SRC += staff-pt-vm.c
 
 # define this if you need to give the device for your pi
@@ -39,6 +40,8 @@ TTYUSB =
 # set RUN = 1 if you want the code to automatically run after building.
 RUN = 1
 
+# add this line at the bottom of `Makefile`.
+# GREP_STR := 'TRACE:\|HASH:\|ERROR:\|PANIC:\|SUCCESS:'
 include $(CS140E_2024_PATH)/libpi/mk/Makefile.robust
 
 clean::

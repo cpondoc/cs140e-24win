@@ -20,6 +20,8 @@
         "initializer_list": "c",
         "utility": "c",
         "cmath": "c",
-        "nrf.h": "c"
+        "nrf.h": "c",
+        "mbr.h": "c",
+        "pi-files.h": "c"
     }
 }

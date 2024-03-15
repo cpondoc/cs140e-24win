@@ -12,7 +12,7 @@
 
 #include "libc/crc.h"
 
-static int trace_p = 0;
+static int trace_p = 1;
 static int init_p = 0;
 
 int pi_sd_trace(int on_p) {

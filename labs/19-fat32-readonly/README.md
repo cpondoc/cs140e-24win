@@ -1,5 +1,45 @@
 ## Build a simple FAT32 read-only file system.
 
+------------------------------------------------------------------------
+***Note***:
+  - hello-fixed.bin is linked at `0x90000` but the checked in test
+    `code/tests/2-fat32-jump.c` assumes it's linked at `0x10000000`.
+    You'll have to update the assertion in `2-fat32-jump.c` from:
+
+            assert(addr == 0x100000f0);
+
+    to:
+
+            assert(addr == 0x90000);
+
+    To see what is going on: In the `hello-fixed` directory look at the
+    `memmap.fixed` linker script and the list file produced by compiling
+    `hello-fixed.list` to see how the code is laid out.  Look at the
+    code addresses in the list file and compare them to the linker script.
+
+    Note that the README below is for a harder version of the lab
+    where you'd modify the linker script.  Currently we just give
+    you everything for `hello-f.bin` --- you can just compile and
+    copy it to the SDcard.  You can compute its hash by running the 
+    the program in `hash-sd/hash-files`  on `hello-f.bin`.  For
+    mine I get:
+
+        hash-sd % ./hash-files ../hello-fixed/hello-f.bin
+        about to hash 2 files
+        HASH: crc of file=<../hello-fixed/hello-f.bin> (nbytes=2704) = 0xf33f6ff8
+
+  - Common mistake: if you get too many files that the staff code
+    does not, recall that `fat32_dirent_attr_t` attributes are a
+    bitwise-or so in general you'll have to bitwise-and them rather than
+    directly compare.  Also make sure you're ignoreing hidden files,
+    volume labels, long file name entries.
+
+  - Also if you write/delete you should set the first byte to 0xe5 not
+    0x00.  Otherwise it's a subtle bug.
+
+------------------------------------------------------------------------
+
+
 ***NOTE***:
   - In a poetic irony, my laptop died last night and the m.2 ssd wouldn't
     boot a new spare laptop.  So the code in this lab is identical to 
@@ -19,6 +59,7 @@
   driver we use.
     - Tests 0 and 1 should work.  Tests 2 will partially work, but some of them
       require you to copy files to the SD card first (described later in the README).
+- If make isn't working, open the makefile and replace `CFLAGS_EXTRA` with `CFLAGS`
 - Once the test works, change the Makefile to not use the staff object files.
 
 We will do a fancy hello world: 

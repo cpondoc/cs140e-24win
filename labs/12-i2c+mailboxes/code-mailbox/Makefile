@@ -1,4 +1,5 @@
-PROGS := test-mbox.c
+# PROGS := test-mbox.c
+PROGS := overclock.c
 COMMON_SRC := mbox.c
 
 # define this if you need to give the device for your pi

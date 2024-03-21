@@ -103,6 +103,8 @@ mbox_send(unsigned channel, volatile void *data) {
 // implement these!
 uint32_t rpi_get_revision(void);
 uint32_t rpi_get_model(void);
+uint32_t get_clock_rate(void);
+uint32_t set_clock_rate(uint32_t clock_rate);
 uint32_t rpi_clock_curhz_get(uint32_t clock);
 uint32_t rpi_clock_realhz_get(uint32_t clock);
 uint32_t rpi_clock_hz_set(uint32_t clock, uint32_t hz);

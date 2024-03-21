@@ -22,6 +22,7 @@
         "cmath": "c",
         "nrf.h": "c",
         "mbr.h": "c",
-        "pi-files.h": "c"
+        "pi-files.h": "c",
+        "hc-sr04.h": "c"
     }
 }

@@ -196,7 +196,7 @@ static fat32_dirent_t *get_dirents(fat32_fs_t *fs, uint32_t cluster_start, uint3
 pi_directory_t fat32_readdir(fat32_fs_t *fs, pi_dirent_t *dirent) {
   demand(init_p, "fat32 not initialized!");
   demand(dirent->is_dir_p, "tried to readdir a file!");
-  // TODO: use `get_dirents` to read the raw dirent structures from the disk
+  // Use `get_dirents` to read the raw dirent structures from the disk
   uint32_t n_dirents;
   fat32_dirent_t *dirents = get_dirents(fs, dirent->cluster_id, &n_dirents);
 
@@ -210,11 +210,11 @@ pi_directory_t fat32_readdir(fat32_fs_t *fs, pi_dirent_t *dirent) {
   uint32_t actual_n_dirents = 0;
   uint32_t counter = 0;
   while (counter < n_dirents) {
-    if ((dirents[counter].attr != 0) && ((dirents[counter].attr & FAT32_VOLUME_LABEL) != FAT32_VOLUME_LABEL)) { // && ((dirents[counter].attr & FAT32_LONG_FILE_NAME) != FAT32_LONG_FILE_NAME) && ((dirents[counter].attr & FAT32_HIDDEN) != FAT32_HIDDEN)) {
-    //if (((dirents[counter].attr & (FAT32_LONG_FILE_NAME & FAT32_VOLUME_LABEL)) == 0) && ((dirents[counter].file_nbytes) > 0)) {
+
+    // Specific condition I'm checking: if attr == 0, or if the volume label is set.
+    if ((dirents[counter].attr != 0) && ((dirents[counter].attr & FAT32_VOLUME_LABEL) != FAT32_VOLUME_LABEL)) {
       dirent_vals[actual_n_dirents] = dirent_convert(&dirents[counter]);
       actual_n_dirents += 1;
-    //}
     }
     counter += 1;
   }

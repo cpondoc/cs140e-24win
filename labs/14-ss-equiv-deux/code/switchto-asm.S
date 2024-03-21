@@ -57,9 +57,30 @@ MK_FN(switchto_priv_asm)
     msr cpsr_cxsf, r1
     prefetch_flush(r2)
 
-    @ Load in the register values
-    ldm r0, {r0-r15}
-    asm_not_reached();
+    @ Old, non-working code
+    @ Load back in register values
+    @ ldm r0, {r0-r15}
+    @ asm_not_reached();
+
+    @ Set the stack pointer
+    @ mov sp, r0
+
+    @ Go to the other mode
+    @ ldr r1, [r0, #64]
+    @ msr cpsr, r1
+    @ prefetch_flush(lr)
+
+    @ Load the values
+    @ ldm r0, {r0-r14}
+
+    @ Go back into the old mode
+    @ cps #SUPER_MODE
+    @ prefetch_flush(lr)
+
+    @ Adjust stack pointer
+    @ add sp, sp, #60
+    @ rfe sp
+    @ asm_not_reached();
 
 @ you'll have to write this, but it should mirror your other save
 @ routines.    

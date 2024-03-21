@@ -159,7 +159,6 @@ int uart_tx_is_empty(void) {
 // turning it off / on, etc.
 void uart_flush_tx(void) {
     dev_barrier();
-    while(!uart_tx_is_empty())
-        ;
+    while(!uart_tx_is_empty());
     dev_barrier();
 }

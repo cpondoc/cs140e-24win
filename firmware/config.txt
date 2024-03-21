@@ -1,6 +1,6 @@
 gpu_mem=64
 
-arm_freq=700
+arm_freq=1500
 core_freq=250
 
 kernel=kernel.img
